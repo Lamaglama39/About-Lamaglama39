@@ -4,13 +4,11 @@ import "../App.css";
 
 import { TopBar } from "./TopBar";
 
-function Profile() {
+export const Profile = () => {
   return (
     <>
       <TopBar></TopBar>
       <h1>Profile!!!</h1>
     </>
   );
-}
-
-export default Profile;
+};
