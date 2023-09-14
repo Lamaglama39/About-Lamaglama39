@@ -4,13 +4,11 @@ import "../App.css";
 
 import { TopBar } from "./TopBar";
 
-function Apps() {
+export const Apps = () => {
   return (
     <>
       <TopBar></TopBar>
       <h1>Apps!!!</h1>
     </>
   );
-}
-
-export default Apps;
+};

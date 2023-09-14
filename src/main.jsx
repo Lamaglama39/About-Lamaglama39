@@ -4,9 +4,10 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import "./index.css";
 
-import Top from "./components/Top.jsx";
-import Apps from "./components/Apps.jsx";
-import Profile from "./components/Profile.jsx";
+import { Top } from "./components/Top";
+import { Apps } from "./components/Apps";
+import { Profile } from "./components/Profile";
+import { NoMatch } from "./components/NoMatch";
 
 const rootElement = document.getElementById("root");
 ReactDOM.createRoot(rootElement).render(
@@ -17,6 +18,7 @@ ReactDOM.createRoot(rootElement).render(
           <Route path="/" element={<Top />} />
           <Route path="/apps" element={<Apps />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="*" element={<NoMatch />} />
         </Routes>
       </ChakraProvider>
     </BrowserRouter>

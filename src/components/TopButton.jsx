@@ -1,21 +1,18 @@
 import PropTypes from "prop-types";
-import { Button } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import { Text } from "@chakra-ui/react";
 
-export const TopButton = ({ buttonName }) => {
+export const TopButton = ({ buttonName, routeName }) => {
   return (
     <div>
-      <Button
-        width={"15vw"}
-        height={"4vh"}
-        fontSize={"2vh"}
-        colorScheme="green"
-      >
-        {buttonName}
-      </Button>
+      <Text fontSize={"3vh"} colorScheme="green">
+        <Link to={routeName}>{buttonName}</Link>
+      </Text>
     </div>
   );
 };
 
 TopButton.propTypes = {
   buttonName: PropTypes.string.isRequired,
+  routeName: PropTypes.string.isRequired,
 };

@@ -3,7 +3,11 @@ import { TopButton } from "./TopButton";
 import { ModeIcon } from "./ModeIcon";
 
 export const TopBar = () => {
-  const buttonNameList = ["Top", "Apps", "Profile"];
+  const buttonNameList = [
+    ["Top", "/"],
+    ["Apps", "/apps"],
+    ["Profile", "/profile"],
+  ];
   return (
     <div>
       <Box
@@ -15,9 +19,18 @@ export const TopBar = () => {
         justifyContent={"space-around"}
         alignItems={"center"}
       >
-        <TopButton buttonName={buttonNameList[0]}></TopButton>
-        <TopButton buttonName={buttonNameList[1]}></TopButton>
-        <TopButton buttonName={buttonNameList[2]}></TopButton>
+        <TopButton
+          buttonName={buttonNameList[0][0]}
+          routeName={buttonNameList[0][1]}
+        ></TopButton>
+        <TopButton
+          buttonName={buttonNameList[1][0]}
+          routeName={buttonNameList[1][1]}
+        ></TopButton>
+        <TopButton
+          buttonName={buttonNameList[2][0]}
+          routeName={buttonNameList[2][1]}
+        ></TopButton>
         <ModeIcon light={true}></ModeIcon>
       </Box>
     </div>

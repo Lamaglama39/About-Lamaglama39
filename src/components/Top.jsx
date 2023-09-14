@@ -6,7 +6,7 @@ import { TopBar } from "./TopBar";
 import { VicugnaArea } from "./VicugnaArea";
 import { SkillList } from "./SkillList";
 
-function Top() {
+export const Top = () => {
   return (
     <>
       <TopBar></TopBar>
@@ -14,6 +14,4 @@ function Top() {
       <SkillList></SkillList>
     </>
   );
-}
-
-export default Top;
+};
