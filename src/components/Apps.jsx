@@ -3,12 +3,13 @@ import { Box } from "@chakra-ui/react";
 import "../App.css";
 
 import { TopBar } from "./TopBar";
+import { AppList } from "./AppList";
 
 export const Apps = () => {
   return (
     <>
       <TopBar></TopBar>
-      <h1>Apps!!!</h1>
+      <AppList></AppList>
     </>
   );
 };
