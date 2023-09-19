@@ -5,7 +5,7 @@ import { IconList } from "./IconList";
 export const SkillList = () => {
   return (
     <div>
-      <Box width={"100vw"} height={"40vh"} bg={"green.200"} marginTop={"0"}>
+      <Box width={"100vw"} height={"40vh"} bg={"green.300"} marginTop={"0"}>
         <TitleText title={"Skill Set"} size={"4vh"}></TitleText>
         <IconList></IconList>
       </Box>

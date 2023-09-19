@@ -2,22 +2,24 @@ import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import "./index.css";
+import "./index.css";
 
-import { Top } from "./components/Top";
-import { Apps } from "./components/Apps";
-import { Profile } from "./components/Profile";
-import { NoMatch } from "./components/NoMatch";
+import { TopBar } from "./page/TopBar";
+import { TopPage } from "./page/TopPage";
+import { AppsPage } from "./page/AppsPage";
+import { ProfilePage } from "./page/ProfilePage";
+import { NoMatch } from "./page/NoMatchPage";
 
 const rootElement = document.getElementById("root");
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <ChakraProvider resetCSS={false}>
+        <TopBar></TopBar>
         <Routes>
-          <Route path="/" element={<Top />} />
-          <Route path="/apps" element={<Apps />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/" element={<TopPage />} />
+          <Route path="/apps" element={<AppsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="*" element={<NoMatch />} />
         </Routes>
       </ChakraProvider>

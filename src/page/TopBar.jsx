@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
-import { TopButton } from "./TopButton";
-import { ModeIcon } from "./ModeIcon";
+import { TopButton } from "../components/TopButton";
+import { ModeIcon } from "../components/ModeIcon";
 
 export const TopBar = () => {
   const buttonNameList = [
