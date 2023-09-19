@@ -28,7 +28,7 @@ export const AppList = () => {
   return (
     <>
       <Box
-        bg={"green.300"}
+        bg={"green.400"}
         padding={"3vh"}
         display={"flex"}
         flexFlow={"column"}
