@@ -1,36 +1,22 @@
 import { Box } from "@chakra-ui/react";
-import { TopButton } from "../components/TopButton";
+import { TopButtonList } from "../components/TopButtonList";
 import { ModeIcon } from "../components/ModeIcon";
 
 export const TopBar = () => {
-  const buttonNameList = [
-    ["Top", "/"],
-    ["Apps", "/apps"],
-    ["Profile", "/profile"],
-  ];
   return (
     <div>
       <Box
         width={"100vw"}
         height={"5vh"}
-        bg={"green.600"}
-        borderBottom={"0.5vh solid black"}
+        bg={"mediumGreen"}
         display={"flex"}
         justifyContent={"space-around"}
         alignItems={"center"}
+        position={"fixed"}
+        top="0"
+        zIndex="docked"
       >
-        <TopButton
-          buttonName={buttonNameList[0][0]}
-          routeName={buttonNameList[0][1]}
-        ></TopButton>
-        <TopButton
-          buttonName={buttonNameList[1][0]}
-          routeName={buttonNameList[1][1]}
-        ></TopButton>
-        <TopButton
-          buttonName={buttonNameList[2][0]}
-          routeName={buttonNameList[2][1]}
-        ></TopButton>
+        <TopButtonList></TopButtonList>
         <ModeIcon light={true}></ModeIcon>
       </Box>
     </div>

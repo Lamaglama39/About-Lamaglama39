@@ -4,7 +4,7 @@ import { Box } from "@chakra-ui/react";
 
 export const ProfileText = () => {
   return (
-    <Box w="90%">
+    <Box w="90%" marginTop={"5vh"}>
       <TitleText title={"Lamaglama39"} size={"4vh"}></TitleText>
       <Text>
         アルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカアルパカ

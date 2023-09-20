@@ -2,7 +2,11 @@ import PropTypes from "prop-types";
 import { Text } from "@chakra-ui/react";
 
 export const TitleText = ({ title, size }) => {
-  return <Text fontSize={size}>{title}</Text>;
+  return (
+    <Text fontWeight={"bold"} fontSize={size} padding={"1vh"} margin={"0"}>
+      {title}
+    </Text>
+  );
 };
 
 TitleText.propTypes = {

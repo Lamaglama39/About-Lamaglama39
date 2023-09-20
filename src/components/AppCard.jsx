@@ -1,6 +1,5 @@
 import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
-import { Button } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import { SiGithub } from "react-icons/si";
@@ -12,20 +11,19 @@ export const AppCard = ({ Name, AppImage, Description, Links }) => {
     <>
       <Card
         bg={"lightgray"}
-        w={"100%"}
-        h={"100%"}
-        borderRadius={"15px"}
-        border={"solid 1px black"}
-        marginBottom={"2vh"}
+        w={["90%", "90%", "calc(30% - 1%)"]}
+        borderRadius={"20px"}
+        border={"solid 2px darkGreen"}
+        marginBottom={"5vh"}
       >
-        <CardHeader bg={"skyblue"} borderTopRadius={"15px"}>
+        <CardHeader bg={"lightGreen"} borderTopRadius={"17px"}>
           <Heading size="md">{Name}</Heading>
-          <Image w={"30%"} h={"30%"} src={AppImage} alt={Name} />
+          <Image w={"10vw"} h={"10vw"} src={AppImage} alt={Name} />
         </CardHeader>
-        <CardBody w={"30%"} h={"30%"}>
+        <CardBody>
           <Text>{Description}</Text>
         </CardBody>
-        <CardFooter w={"30%"} h={"30%"}>
+        <CardFooter>
           <Link href={Links}>アプリへGO!!!</Link>
           <Link href={Links}>
             <IconContext.Provider value={{ color: "black", size: "4vh" }}>

@@ -1,13 +1,16 @@
-import "../App.css";
-
+import { TopBar } from "./TopBar";
 import { VicugnaArea } from "../components/VicugnaArea";
 import { SkillList } from "../components/SkillList";
+import { Box } from "@chakra-ui/react";
 
 export const TopPage = () => {
   return (
     <>
-      <VicugnaArea></VicugnaArea>
-      <SkillList></SkillList>
+      <TopBar></TopBar>
+      <Box display={"flex"} flexFlow={["column", "column", "row"]}>
+        <VicugnaArea></VicugnaArea>
+        <SkillList></SkillList>
+      </Box>
     </>
   );
 };

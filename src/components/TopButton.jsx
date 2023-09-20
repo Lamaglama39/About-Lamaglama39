@@ -1,12 +1,22 @@
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 import { Text } from "@chakra-ui/react";
+import { Link as ChakraLink } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 
 export const TopButton = ({ buttonName, routeName }) => {
   return (
     <div>
-      <Text fontSize={"3vh"} colorScheme="green">
-        <Link to={routeName}>{buttonName}</Link>
+      <Text fontSize={"3vh"}>
+        <ChakraLink
+          as={RouterLink}
+          to={routeName}
+          fontWeight={"bold"}
+          color="softGreen"
+          textDecoration="none"
+          _hover={{ textDecoration: "none" }}
+        >
+          {buttonName}
+        </ChakraLink>
       </Text>
     </div>
   );
