@@ -4,14 +4,14 @@ import { ProfileInfoIcon } from "./ProfileInfoIcon";
 export const ProfileCardList = ({ IconName, UrlLink }) => {
   return (
     <Box
-      bg={"green.200"}
+      bg={"lightGreen"}
       border={"2px solid black"}
-      p={4}
-      color="white"
+      padding={"2%"}
       display={"flex"}
       justifyContent={"space-around"}
       alignItems={"center"}
-      w="80%"
+      w={["80%", "80%", "calc(50% - 7%)"]}
+      h={["5vh"]}
       borderRadius={"15px"}
       marginTop={"5vh"}
     >

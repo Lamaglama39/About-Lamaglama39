@@ -59,6 +59,7 @@ export const Icons = ({ title }) => {
           <Box
             key={index}
             display="inline-block"
+            margin={"1vw"}
             mr={index === selectedIcons.length - 1 ? "0" : "2"}
           >
             {icon}

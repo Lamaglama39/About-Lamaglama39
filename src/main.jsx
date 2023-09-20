@@ -4,7 +4,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 
-import { TopBar } from "./page/TopBar";
+import theme from "./theme/theme";
+
 import { TopPage } from "./page/TopPage";
 import { AppsPage } from "./page/AppsPage";
 import { ProfilePage } from "./page/ProfilePage";
@@ -14,8 +15,7 @@ const rootElement = document.getElementById("root");
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ChakraProvider resetCSS={false}>
-        <TopBar></TopBar>
+      <ChakraProvider resetCSS={false} theme={theme}>
         <Routes>
           <Route path="/" element={<TopPage />} />
           <Route path="/apps" element={<AppsPage />} />
