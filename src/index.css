@@ -20,3 +20,15 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+
+/* styles.css */
+.slide-enter, .slide-exit-active {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.slide-enter-active, .slide-exit {
+  transform: translateX(0);
+  opacity: 1;
+  transition: opacity 300ms, transform 1000ms;
+}
