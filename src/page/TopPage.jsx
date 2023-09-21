@@ -3,7 +3,7 @@ import { CSSTransition } from "react-transition-group";
 
 import { VicugnaArea } from "../components/VicugnaArea";
 import { SkillList } from "../components/SkillList";
-import { Box } from "@chakra-ui/react";
+import { Box, useBreakpointValue } from "@chakra-ui/react";
 
 export const TopPage = () => {
   const [inProp, setInProp] = useState(false);
@@ -12,8 +12,19 @@ export const TopPage = () => {
     setInProp(true);
   }, []);
 
+  const classNames = useBreakpointValue({
+    base: "slideY",
+    sm: "slideY",
+    md: "slideX",
+  });
+
   return (
-    <CSSTransition in={inProp} classNames="slide" timeout={1000} unmountOnExit>
+    <CSSTransition
+      in={inProp}
+      classNames={classNames}
+      timeout={1000}
+      unmountOnExit
+    >
       <div>
         <Box display={"flex"} flexFlow={["column", "column", "row"]}>
           <VicugnaArea></VicugnaArea>
