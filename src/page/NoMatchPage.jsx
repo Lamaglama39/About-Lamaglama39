@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 
-import { Box } from "@chakra-ui/react";
+import { Box, useBreakpointValue } from "@chakra-ui/react";
 import { TitleText } from "../components/TitleText";
 
 export const NoMatch = () => {
@@ -11,8 +11,19 @@ export const NoMatch = () => {
     setInProp(true);
   }, []);
 
+  const classNames = useBreakpointValue({
+    base: "slideY",
+    sm: "slideY",
+    md: "slideX",
+  });
+
   return (
-    <CSSTransition in={inProp} classNames="slide" timeout={800} unmountOnExit>
+    <CSSTransition
+      in={inProp}
+      classNames={classNames}
+      timeout={800}
+      unmountOnExit
+    >
       <div>
         <Box
           marginTop={"5vh"}
