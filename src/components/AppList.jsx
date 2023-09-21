@@ -48,6 +48,7 @@ export const AppList = () => {
   ];
   return (
     <>
+      <Box height={"5vh"}></Box>
       <Box
         bg={"#04BFAD"}
         padding={"3vh"}
@@ -55,7 +56,6 @@ export const AppList = () => {
         flexFlow={["column", "column", "row wrap"]}
         justifyContent={"space-between"}
         alignItems={"center"}
-        marginTop={"5vh"}
       >
         {AppSet.map((App) => (
           <AppCard
