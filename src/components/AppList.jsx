@@ -50,7 +50,7 @@ export const AppList = () => {
     <>
       <Box height={"5vh"}></Box>
       <Box
-        bg={"#04BFAD"}
+        bg={"softGreen"}
         padding={"3vh"}
         display={"flex"}
         flexFlow={["column", "column", "row wrap"]}

@@ -1,6 +1,6 @@
 import { TopButton } from "../components/TopButton";
 
-export const TopButtonList = () => {
+export const TopButtonList = ({ onNavigate }) => {
   const buttonNameList = [
     ["Top", "/"],
     ["Apps", "/apps"],
@@ -15,6 +15,7 @@ export const TopButtonList = () => {
             key={buttonName[0]}
             buttonName={buttonName[0]}
             routeName={buttonName[1]}
+            onNavigate={onNavigate}
           />
         );
       })}

@@ -9,7 +9,6 @@ export const VicugnaArea = () => {
       <Box
         width={["100vw", "100vw", "75vw"]}
         height={["80vh", "80vh", "100vh"]}
-        bg={"lightGreen"}
       >
         <TitleText
           title={"Lamaglama39"}

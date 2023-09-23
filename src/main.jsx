@@ -1,25 +1,39 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { ChakraProvider } from "@chakra-ui/react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+
+import { useState } from "react";
+
 import { Box } from "@chakra-ui/react";
-import "./index.css";
 
 import theme from "./theme/theme";
+import "./index.css";
 
-import { TopBar } from "./page/TopBar";
+import { NavigationContext } from "./components/NavigationContext";
 import { TopPage } from "./page/TopPage";
 import { AppsPage } from "./page/AppsPage";
 import { ProfilePage } from "./page/ProfilePage";
 import { NoMatch } from "./page/NoMatchPage";
 
-const rootElement = document.getElementById("root");
-ReactDOM.createRoot(rootElement).render(
-  <React.StrictMode>
-    <BrowserRouter>
+const App = () => {
+  const navigate = useNavigate();
+
+  const [inProp, setInProp] = useState(false);
+
+  const handleExitAndNavigate = (route) => {
+    setInProp(false);
+    setTimeout(() => {
+      navigate(route);
+    }, 900);
+  };
+
+  return (
+    <NavigationContext.Provider
+      value={{ navigate: handleExitAndNavigate, setInProp, inProp }}
+    >
       <ChakraProvider resetCSS={false} theme={theme}>
-        <Box bg={"softGreen"} height={"100vh"} width={"100vw"}>
-          <TopBar></TopBar>
+        <Box className="Pages" height={"100vh"} width={"100vw"}>
           <Routes>
             <Route path="/" element={<TopPage />} />
             <Route path="/apps" element={<AppsPage />} />
@@ -28,6 +42,15 @@ ReactDOM.createRoot(rootElement).render(
           </Routes>
         </Box>
       </ChakraProvider>
+    </NavigationContext.Provider>
+  );
+};
+
+const rootElement = document.getElementById("root");
+ReactDOM.createRoot(rootElement).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App></App>
     </BrowserRouter>
   </React.StrictMode>
 );
