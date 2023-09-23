@@ -21,25 +21,53 @@ body {
   min-height: 100vh;
 }
 
-/* styles.css */
-.slideX-enter, .slideX-exit-active {
+
+/* X-axis slide */
+/* Entering */
+.slideX-enter {
   transform: translateX(100%);
   opacity: 0;
 }
 
-.slideX-enter-active, .slideX-exit {
+.slideX-enter-active {
   transform: translateX(0);
   opacity: 1;
-  transition: opacity 300ms, transform 1000ms;
+  transition: opacity 300ms, transform 900ms;
 }
 
-.slideY-enter, .slideY-exit-active {
+/* Exiting */
+.slideX-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.slideX-exit-active {
+  transform: translateX(-100%);
+  opacity: 1;
+  transition: opacity 300ms, transform 900ms;
+}
+
+/* Y-axis slide */
+/* Entering */
+.slideY-enter {
   transform: translateY(100%);
   opacity: 0;
 }
 
-.slideY-enter-active, .slideY-exit {
+.slideY-enter-active {
   transform: translateY(0);
   opacity: 1;
-  transition: opacity 300ms, transform 1000ms;
+  transition: opacity 300ms, transform 900ms;
+}
+
+/* Exiting */
+.slideY-exit {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.slideY-exit-active {
+  transform: translateY(-100%);
+  opacity: 1;
+  transition: opacity 300ms, transform 900ms;
 }

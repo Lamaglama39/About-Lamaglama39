@@ -8,7 +8,7 @@ export const SkillList = () => {
       <Box
         width={["100vw", "100vw", "25vw"]}
         height={["50vh", "50vh", "100vh"]}
-        bg={"softGreen"}
+        className="SkillList"
         marginTop={["0", "0", "5vh"]}
       >
         <TitleText title={"Skill Set"} size={["4vh", "4vh", "6vh"]}></TitleText>

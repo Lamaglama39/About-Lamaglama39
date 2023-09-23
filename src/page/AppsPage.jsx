@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useContext } from "react";
+import { NavigationContext } from "../components/NavigationContext";
 import { AppList } from "../components/AppList";
 import { CSSTransition } from "react-transition-group";
 import { useBreakpointValue } from "@chakra-ui/react";
 
+import { TopBar } from "../components/TopBar";
+
 export const AppsPage = () => {
-  const [inProp, setInProp] = useState(false);
+  const { inProp, setInProp } = useContext(NavigationContext);
 
   useEffect(() => {
     setInProp(true);
-  }, []);
+  }, [setInProp]);
 
   const classNames = useBreakpointValue({
     base: "slideY",
@@ -17,15 +20,18 @@ export const AppsPage = () => {
   });
 
   return (
-    <CSSTransition
-      in={inProp}
-      classNames={classNames}
-      timeout={1000}
-      unmountOnExit
-    >
-      <div>
-        <AppList></AppList>
-      </div>
-    </CSSTransition>
+    <>
+      <TopBar></TopBar>
+      <CSSTransition
+        in={inProp}
+        classNames={classNames}
+        timeout={900}
+        unmountOnExit
+      >
+        <div>
+          <AppList></AppList>
+        </div>
+      </CSSTransition>
+    </>
   );
 };

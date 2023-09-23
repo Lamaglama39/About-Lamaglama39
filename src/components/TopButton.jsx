@@ -1,17 +1,19 @@
 import PropTypes from "prop-types";
 import { Text } from "@chakra-ui/react";
 import { Link as ChakraLink } from "@chakra-ui/react";
-import { Link as RouterLink } from "react-router-dom";
+import { useContext } from "react";
+
+import { NavigationContext } from "./NavigationContext";
 
 export const TopButton = ({ buttonName, routeName }) => {
+  const { navigate } = useContext(NavigationContext);
+
   return (
     <div>
       <Text fontSize={"3vh"}>
         <ChakraLink
-          as={RouterLink}
-          to={routeName}
+          onClick={() => navigate(routeName)}
           fontWeight={"bold"}
-          color="softGreen"
           textDecoration="none"
           _hover={{ textDecoration: "none" }}
         >

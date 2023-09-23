@@ -1,8 +1,8 @@
 import { Box } from "@chakra-ui/react";
-import { TopButtonList } from "../components/TopButtonList";
-import { ModeIcon } from "../components/ModeIcon";
+import { TopButtonList } from "./TopButtonList";
+import { ModeIcon } from "./ModeIcon";
 
-export const TopBar = () => {
+export const TopBar = ({ onNavigate }) => {
   return (
     <div>
       <Box
@@ -15,8 +15,9 @@ export const TopBar = () => {
         position={"fixed"}
         top="0"
         zIndex="docked"
+        className="TopBar"
       >
-        <TopButtonList></TopButtonList>
+        <TopButtonList onNavigate={onNavigate}></TopButtonList>
         <ModeIcon light={true}></ModeIcon>
       </Box>
     </div>
