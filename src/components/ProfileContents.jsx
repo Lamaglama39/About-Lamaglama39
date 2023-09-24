@@ -4,7 +4,7 @@ import { ProfileCard } from "../components/ProfileCard";
 
 export const ProfileContents = () => {
   return (
-    <Box bg={"softGreen"} h={"100vh"} padding={"5%"}>
+    <Box h={"100vh"} padding={"5%"} className="Pages">
       <ProfileText></ProfileText>
       <Box
         display={"flex"}

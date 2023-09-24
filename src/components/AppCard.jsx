@@ -10,20 +10,21 @@ export const AppCard = ({ Name, AppImage, Description, Links }) => {
   return (
     <>
       <Card
-        bg={"lightgray"}
         w={["90%", "90%", "calc(30% - 1%)"]}
         borderRadius={"20px"}
-        border={"solid 2px darkGreen"}
+        border={"solid 2px gray"}
         marginBottom={"5vh"}
       >
-        <CardHeader bg={"lightGreen"} borderTopRadius={"17px"}>
-          <Heading size="md">{Name}</Heading>
+        <CardHeader className="cardBoxTop" borderTopRadius={"17px"}>
+          <Heading size="md" className="cardBoxTop">
+            {Name}
+          </Heading>
           <Image w={"10vw"} h={"10vw"} src={AppImage} alt={Name} />
         </CardHeader>
-        <CardBody>
+        <CardBody className="cardBox">
           <Text>{Description}</Text>
         </CardBody>
-        <CardFooter>
+        <CardFooter className="cardBox" borderBottomRadius={"17px"}>
           <Link href={Links}>アプリへGO!!!</Link>
           <Link href={Links}>
             <IconContext.Provider value={{ color: "black", size: "4vh" }}>
