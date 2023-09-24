@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import { useEffect, useContext } from "react";
 import { NavigationContext } from "../components/NavigationContext";
 import { AppList } from "../components/AppList";
@@ -20,7 +21,7 @@ export const AppsPage = () => {
   });
 
   return (
-    <>
+    <Box className="Pages">
       <TopBar></TopBar>
       <CSSTransition
         in={inProp}
@@ -32,6 +33,6 @@ export const AppsPage = () => {
           <AppList></AppList>
         </div>
       </CSSTransition>
-    </>
+    </Box>
   );
 };

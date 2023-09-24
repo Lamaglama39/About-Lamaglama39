@@ -56,6 +56,7 @@ export const AppList = () => {
         flexFlow={["column", "column", "row wrap"]}
         justifyContent={"space-between"}
         alignItems={"center"}
+        className="Pages"
       >
         {AppSet.map((App) => (
           <AppCard

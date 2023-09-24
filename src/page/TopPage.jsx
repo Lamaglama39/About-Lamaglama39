@@ -6,6 +6,7 @@ import { TopBar } from "../components/TopBar";
 import { VicugnaArea } from "../components/VicugnaArea";
 import { SkillList } from "../components/SkillList";
 import { Box, useBreakpointValue } from "@chakra-ui/react";
+import { ClassNames } from "@emotion/react";
 
 export const TopPage = () => {
   const { inProp, setInProp } = useContext(NavigationContext);
@@ -30,7 +31,11 @@ export const TopPage = () => {
         unmountOnExit
       >
         <div>
-          <Box display={"flex"} flexFlow={["column", "column", "row"]}>
+          <Box
+            display={"flex"}
+            flexFlow={["column", "column", "row"]}
+            className="Pages"
+          >
             <VicugnaArea></VicugnaArea>
             <SkillList></SkillList>
           </Box>

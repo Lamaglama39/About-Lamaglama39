@@ -54,7 +54,7 @@ export const Icons = ({ title }) => {
 
   return (
     <Box>
-      <IconContext.Provider value={{ color: "black", size: "4vh" }}>
+      <IconContext.Provider value={{ size: "4vh" }}>
         {selectedIcons.map((icon, index) => (
           <Box
             key={index}
