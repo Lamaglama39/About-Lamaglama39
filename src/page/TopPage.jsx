@@ -1,24 +1,13 @@
 import { CSSTransition } from "react-transition-group";
-import { useEffect, useContext } from "react";
-import { NavigationContext } from "../components/NavigationContext";
 
 import { TopBar } from "../components/TopBar";
 import { VicugnaArea } from "../components/VicugnaArea";
 import { SkillList } from "../components/SkillList";
-import { Box, useBreakpointValue } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
+import { usePageSetup } from "../utils/usePageSetup";
 
 export const TopPage = () => {
-  const { inProp, setInProp } = useContext(NavigationContext);
-
-  useEffect(() => {
-    setInProp(true);
-  }, [setInProp]);
-
-  const classNames = useBreakpointValue({
-    base: "slideY",
-    sm: "slideY",
-    md: "slideX",
-  });
+  const { inProp, classNames } = usePageSetup();
 
   return (
     <div>

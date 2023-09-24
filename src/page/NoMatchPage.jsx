@@ -1,23 +1,12 @@
-import { useEffect, useContext } from "react";
-import { NavigationContext } from "../components/NavigationContext";
 import { CSSTransition } from "react-transition-group";
 
 import { TopBar } from "../components/TopBar";
-import { Box, useBreakpointValue } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { TitleText } from "../components/TitleText";
+import { usePageSetup } from "../utils/usePageSetup";
 
 export const NoMatch = () => {
-  const { inProp, setInProp } = useContext(NavigationContext);
-
-  useEffect(() => {
-    setInProp(true);
-  }, [setInProp]);
-
-  const classNames = useBreakpointValue({
-    base: "slideY",
-    sm: "slideY",
-    md: "slideX",
-  });
+  const { inProp, classNames } = usePageSetup();
 
   return (
     <>

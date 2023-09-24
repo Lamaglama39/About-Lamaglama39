@@ -2,25 +2,33 @@ import PropTypes from "prop-types";
 import { Text } from "@chakra-ui/react";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import { useContext } from "react";
-
+import { useLocation } from "react-router-dom";
 import { NavigationContext } from "./NavigationContext";
 
 export const TopButton = ({ buttonName, routeName }) => {
   const { navigate } = useContext(NavigationContext);
+  const location = useLocation(); // 現在のlocationを取得
+
+  const isCurrentPage = location.pathname === routeName; // 現在のページがこのボタンのルートと一致しているかどうかをチェック
 
   return (
-    <div>
-      <Text fontSize={"3vh"}>
-        <ChakraLink
-          onClick={() => navigate(routeName)}
-          fontWeight={"bold"}
-          textDecoration="none"
-          _hover={{ textDecoration: "none" }}
-        >
-          {buttonName}
-        </ChakraLink>
-      </Text>
-    </div>
+    <Text
+      fontSize={"3vh"}
+      h={"5vh"}
+      w={"10vh"}
+      className={isCurrentPage ? "TopButton" : "none"}
+      textAlign={"center"}
+    >
+      <ChakraLink
+        onClick={isCurrentPage ? null : () => navigate(routeName)} // 現在のページならonClickをnullに設定
+        fontWeight={"bold"}
+        textDecoration="none"
+        _hover={{ textDecoration: isCurrentPage ? "none" : "underline" }}
+        cursor={isCurrentPage ? "default" : "pointer"}
+      >
+        {buttonName}
+      </ChakraLink>
+    </Text>
   );
 };
 
