@@ -3,6 +3,8 @@ import { mode } from "@chakra-ui/theme-tools";
 
 const breakpoints = { base: "0em", sm: "30em", md: "48em" };
 const customColors = {
+  lightButton: "#B3D6D6",
+  darkButton: "#888888",
   lightTop: "#B3D6D6",
   darkTop: "#888888",
   lightPage: "#5E9696",
@@ -23,6 +25,9 @@ const theme = extendTheme({
   breakpoints: breakpoints,
   styles: {
     global: (props) => ({
+      ".TopButton": {
+        bg: mode(customColors.lightSkill, customColors.darkSkill)(props),
+      },
       ".TopBar": {
         bg: mode(customColors.lightTop, customColors.darkTop)(props),
       },
