@@ -6,7 +6,7 @@ export const SkillList = () => {
   return (
     <div>
       <Box
-        width={["100vw", "100vw", "25vw"]}
+        width={["100vw", "100vw", "30vw"]}
         height={["50vh", "50vh", "100vh"]}
         className="SkillList"
         marginTop={["0", "0", "5vh"]}

@@ -7,7 +7,7 @@ export const VicugnaArea = () => {
     <div>
       <Box height={"5vh"}></Box>
       <Box
-        width={["100vw", "100vw", "75vw"]}
+        width={["100vw", "100vw", "70vw"]}
         height={["80vh", "80vh", "100vh"]}
       >
         <TitleText
