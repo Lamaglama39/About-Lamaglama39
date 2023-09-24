@@ -46,7 +46,7 @@ const ChakraIcons = Object.fromEntries(
 
 // SVGレンダリング用関数
 const renderIcon = (IconComponent) => (
-  <IconComponent key={IconComponent.name} w={["4vh", "4vh", "6vh"]} />
+  <IconComponent key={IconComponent.name} w={["4vh", "4vh", "5vh"]} />
 );
 
 export const SvgIconSet = {

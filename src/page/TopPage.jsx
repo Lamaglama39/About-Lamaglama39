@@ -6,7 +6,6 @@ import { TopBar } from "../components/TopBar";
 import { VicugnaArea } from "../components/VicugnaArea";
 import { SkillList } from "../components/SkillList";
 import { Box, useBreakpointValue } from "@chakra-ui/react";
-import { ClassNames } from "@emotion/react";
 
 export const TopPage = () => {
   const { inProp, setInProp } = useContext(NavigationContext);
