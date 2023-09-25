@@ -17,7 +17,7 @@ export const IconList = () => {
           display={"flex"}
           justifyContent={"space-around"}
           alignItems={"center"}
-          marginTop={["3vh", "3vh", "5vh"]}
+          marginTop={["2vh", "2vh", "5vh"]}
           flexFlow={["row", "row", "column"]}
         >
           <TitleText title={type} size={"3vh"}></TitleText>
