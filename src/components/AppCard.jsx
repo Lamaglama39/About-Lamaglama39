@@ -19,7 +19,7 @@ export const AppCard = ({ Name, AppImage, Description, Links }) => {
           <Heading size="md" className="cardBoxTop">
             {Name}
           </Heading>
-          <Image w={"10vw"} h={"10vw"} src={AppImage} alt={Name} />
+          <Image h={"10vw"} src={AppImage} alt={Name} />
         </CardHeader>
         <CardBody className="cardBox">
           <Text>{Description}</Text>

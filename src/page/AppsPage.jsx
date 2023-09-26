@@ -16,6 +16,7 @@ export const AppsPage = () => {
         classNames={classNames}
         timeout={900}
         unmountOnExit
+        className="Pages"
       >
         <div>
           <AppList></AppList>
