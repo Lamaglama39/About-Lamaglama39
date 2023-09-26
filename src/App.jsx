@@ -30,7 +30,7 @@ export const App = () => {
       value={{ navigate: handleExitAndNavigate, setInProp, inProp }}
     >
       <ChakraProvider resetCSS={false} theme={theme}>
-        <Box className="Pages" height={"100vh"} width={"100vw"}>
+        <Box className="Pages" height={"100vh"} width={"100%"}>
           <Routes>
             <Route path="/" element={<TopPage />} />
             <Route path="/apps" element={<AppsPage />} />

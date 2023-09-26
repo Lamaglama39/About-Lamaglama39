@@ -7,10 +7,10 @@ export const AppList = () => {
     <>
       <Box height={"5vh"}></Box>
       <Box
-        bg={"softGreen"}
-        padding={"3vh"}
+        paddingTop={"5vh"}
+        paddingX={"5vh"}
         display={"flex"}
-        flexFlow={["column", "column", "row wrap"]}
+        flexFlow={["column", "row wrap", "row wrap"]}
         justifyContent={"space-between"}
         alignItems={"center"}
         className="Pages"

@@ -14,13 +14,13 @@
   -webkit-text-size-adjust: 100%;
 }
 
-body {
+html, body {
   margin: 0;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  box-sizing: border-box; 
+  min-height: 100%;
 }
-
 
 /* X-axis slide */
 /* Entering */
