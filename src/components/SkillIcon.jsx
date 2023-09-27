@@ -1,29 +1,36 @@
 import PropTypes from "prop-types";
 import { Box } from "@chakra-ui/react";
-import { IconContext } from "react-icons";
 import { IconSet } from "../utils/IconSet";
+import { Link } from "@chakra-ui/react";
 
-export const Icons = ({ title }) => {
+export const SkillIcon = ({ title }) => {
   const selectedIcons = IconSet[title];
 
   return (
     <Box>
-      <IconContext.Provider value={{ size: "4vh" }}>
-        {selectedIcons.map((icon, index) => (
-          <Box
-            key={index}
+      {selectedIcons.map((iconData, index) => (
+        <Box
+          key={index}
+          display="inline-block"
+          margin={["5px", "10px", "15px"]}
+        >
+          <Link
+            href={iconData.url}
+            isExternal
             display="inline-block"
-            margin={"1vw"}
-            mr={index === selectedIcons.length - 1 ? "0" : "2"}
+            textAlign={"center"}
+            h={["6vh", "7vh", "8vh"]}
+            w={["6vh", "7vh", "8vh"]}
           >
-            {icon}
-          </Box>
-        ))}
-      </IconContext.Provider>
+            {iconData.icon}
+            {iconData.name}
+          </Link>
+        </Box>
+      ))}
     </Box>
   );
 };
 
-Icons.propTypes = {
+SkillIcon.propTypes = {
   title: PropTypes.string.isRequired,
 };
