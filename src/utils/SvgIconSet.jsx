@@ -51,27 +51,27 @@ const renderIcon = (IconComponent) => (
 
 export const SvgIconSet = {
   Languages: [
-    renderIcon(ChakraIcons.JavaScript),
-    renderIcon(ChakraIcons.TypeScript),
-    renderIcon(ChakraIcons.Python),
-    renderIcon(ChakraIcons.Bash),
+    { icon: renderIcon(ChakraIcons.JavaScript), name: "JavaScript" },
+    { icon: renderIcon(ChakraIcons.TypeScript), name: "TypeScript" },
+    { icon: renderIcon(ChakraIcons.Python), name: "Python" },
+    { icon: renderIcon(ChakraIcons.Bash), name: "Bash" },
   ],
   Frontend: [
-    renderIcon(ChakraIcons.React),
-    renderIcon(ChakraIcons.NextJs),
-    renderIcon(ChakraIcons.Blender),
-    renderIcon(ChakraIcons.ThreeJs),
+    { icon: renderIcon(ChakraIcons.React), name: "React" },
+    { icon: renderIcon(ChakraIcons.NextJs), name: "NextJs" },
+    { icon: renderIcon(ChakraIcons.Blender), name: "Blender" },
+    { icon: renderIcon(ChakraIcons.ThreeJs), name: "ThreeJs" },
   ],
   Backend: [
-    renderIcon(ChakraIcons.Node),
-    renderIcon(ChakraIcons.Deno),
-    renderIcon(ChakraIcons.Flask),
-    renderIcon(ChakraIcons.MySQL),
+    { icon: renderIcon(ChakraIcons.Node), name: "Node" },
+    { icon: renderIcon(ChakraIcons.Deno), name: "Deno" },
+    { icon: renderIcon(ChakraIcons.Flask), name: "Flask" },
+    { icon: renderIcon(ChakraIcons.MySQL), name: "MySQL" },
   ],
   Infrastructure: [
-    renderIcon(ChakraIcons.Aws),
-    renderIcon(ChakraIcons.Vercel),
-    renderIcon(ChakraIcons.Docker),
-    renderIcon(ChakraIcons.Terraform),
+    { icon: renderIcon(ChakraIcons.Aws), name: "Aws" },
+    { icon: renderIcon(ChakraIcons.Vercel), name: "Vercel" },
+    { icon: renderIcon(ChakraIcons.Docker), name: "Docker" },
+    { icon: renderIcon(ChakraIcons.Terraform), name: "Terraform" },
   ],
 };
