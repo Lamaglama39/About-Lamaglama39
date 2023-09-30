@@ -2,7 +2,7 @@ import { CSSTransition } from "react-transition-group";
 
 import { TopBar } from "../components/TopBar";
 import { VicugnaArea } from "../components/VicugnaArea";
-import { SkillList } from "../components/SkillList";
+import { SkillBox } from "../components/SkillBox";
 import { Box } from "@chakra-ui/react";
 import { usePageSetup } from "../utils/usePageSetup";
 
@@ -10,7 +10,7 @@ export const TopPage = () => {
   const { inProp, classNames } = usePageSetup();
 
   return (
-    <div>
+    <>
       <TopBar></TopBar>
       <CSSTransition
         in={inProp}
@@ -18,17 +18,20 @@ export const TopPage = () => {
         timeout={900}
         unmountOnExit
       >
-        <div>
+        <>
           <Box
             display={"flex"}
             flexFlow={["column", "column", "row"]}
+            justifyContent={"space-between"}
             className="Pages"
+            w={"100%"}
+            h={"100vh"}
           >
             <VicugnaArea></VicugnaArea>
-            <SkillList></SkillList>
+            <SkillBox></SkillBox>
           </Box>
-        </div>
+        </>
       </CSSTransition>
-    </div>
+    </>
   );
 };

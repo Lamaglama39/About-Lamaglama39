@@ -4,15 +4,18 @@ import { VicugnaModel } from "./VicugnaModel";
 
 export const VicugnaArea = () => {
   return (
-    <div>
-      <Box height={"5vh"}></Box>
-      <Box width={["100vw", "100vw", "70vw"]} height={["50vh", "50vh", "95vh"]}>
+    <>
+      <Box
+        marginTop={["5vh"]}
+        width={["100%", "100%", "70%"]}
+        textAlign={"center"}
+      >
         <TitleText
           title={"Lamaglama39"}
-          size={["4vh", "4vh", "6vh"]}
+          size={["24px", "32px", "40px"]}
         ></TitleText>
         <VicugnaModel></VicugnaModel>
       </Box>
-    </div>
+    </>
   );
 };
