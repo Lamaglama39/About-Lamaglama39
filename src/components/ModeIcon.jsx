@@ -1,22 +1,15 @@
-import { IconButton, Tooltip, useColorMode } from "@chakra-ui/react";
-import PropTypes from "prop-types";
+import { Button, useColorMode } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
-export const ModeIcon = (props) => {
+export const ModeIcon = () => {
   const { colorMode, toggleColorMode } = useColorMode();
-  const tooltipLabel =
-    colorMode === "light" ? "ダークモード?" : "ライトモード?";
   return (
-    <Tooltip label={tooltipLabel}>
-      <IconButton
-        {...props}
-        icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-        onClick={toggleColorMode}
-      />
-    </Tooltip>
+    <Button onClick={toggleColorMode} w={"1%"} border={"none"} bg={"none"}>
+      {colorMode === "light" ? (
+        <MoonIcon fontSize={"3vh"} />
+      ) : (
+        <SunIcon fontSize={"3vh"} />
+      )}
+    </Button>
   );
-};
-
-ModeIcon.propTypes = {
-  light: PropTypes.string.isRequired,
 };
