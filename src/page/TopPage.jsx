@@ -18,19 +18,16 @@ export const TopPage = () => {
         timeout={900}
         unmountOnExit
       >
-        <>
-          <Box
-            display={"flex"}
-            flexFlow={["column", "column", "row"]}
-            justifyContent={"space-between"}
-            className="Pages"
-            w={"100%"}
-            h={"100vh"}
-          >
-            <VicugnaArea></VicugnaArea>
-            <SkillBox></SkillBox>
-          </Box>
-        </>
+        <Box
+          display={"flex"}
+          flexFlow={["column", "column", "row"]}
+          justifyContent={"space-between"}
+          className="Pages"
+          w={"100%"}
+        >
+          <VicugnaArea></VicugnaArea>
+          <SkillBox></SkillBox>
+        </Box>
       </CSSTransition>
     </>
   );
