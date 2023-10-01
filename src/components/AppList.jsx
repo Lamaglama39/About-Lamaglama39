@@ -21,7 +21,8 @@ export const AppList = () => {
             Name={App.AppName}
             AppImage={App.AppImagePath}
             Description={App.AppDescription}
-            Links={App.AppLink}
+            AppLinks={App.AppLink}
+            GithubLinks={App.GithubLink}
           ></AppCard>
         ))}
       </Box>
