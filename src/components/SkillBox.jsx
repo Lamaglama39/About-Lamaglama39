@@ -7,6 +7,7 @@ export const SkillBox = () => {
     <>
       <Box
         width={["100%", "100%", "30%"]}
+        h={["", "", "95vh"]}
         className="SkillList"
         marginTop={["0", "0", "5vh"]}
         textAlign={"center"}
