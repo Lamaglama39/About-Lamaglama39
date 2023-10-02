@@ -10,9 +10,8 @@ export const ProfileContents = () => {
         <ProfileText></ProfileText>
         <Box
           display={"flex"}
-          alignItems={"center"}
-          flexFlow={["column", "row wrap", "row wrap"]}
-          justifyContent={"space-between"}
+          flexFlow={["row wrap"]}
+          justifyContent={["space-around", "space-around", "left"]}
         >
           <ProfileCard></ProfileCard>
         </Box>
