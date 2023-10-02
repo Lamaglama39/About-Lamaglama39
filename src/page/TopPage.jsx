@@ -17,13 +17,13 @@ export const TopPage = () => {
         classNames={classNames}
         timeout={900}
         unmountOnExit
+        className="Pages"
       >
         <Box
           display={"flex"}
           flexFlow={["column", "column", "row"]}
           justifyContent={"space-between"}
           className="Pages"
-          w={"100%"}
         >
           <VicugnaArea></VicugnaArea>
           <SkillBox></SkillBox>
