@@ -1,6 +1,7 @@
+import { Link } from "@chakra-ui/react";
 import { IconContext } from "react-icons";
-import { Text } from "@chakra-ui/react";
 import { SiGithub, SiGmail, SiQiita, SiZenn } from "react-icons/si";
+import PropTypes from "prop-types";
 
 export const ProfileInfoIcon = ({ IconName, UrlLink }) => {
   const iconMapping = {
@@ -13,11 +14,15 @@ export const ProfileInfoIcon = ({ IconName, UrlLink }) => {
   const IconComponent = iconMapping[IconName];
 
   return (
-    <>
+    <Link href={UrlLink} isExternal>
       <IconContext.Provider value={{ color: "black", size: "4vh" }}>
         {IconComponent}
       </IconContext.Provider>
-      <Text>{UrlLink}</Text>
-    </>
+    </Link>
   );
+};
+
+ProfileInfoIcon.propTypes = {
+  IconName: PropTypes.string.isRequired,
+  UrlLink: PropTypes.string.isRequired,
 };
