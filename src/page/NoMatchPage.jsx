@@ -1,12 +1,26 @@
+import { useState, useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
 
 import { TopBar } from "../components/TopBar";
 import { Box } from "@chakra-ui/react";
-import { TitleText } from "../components/TitleText";
 import { usePageSetup } from "../utils/usePageSetup";
+import { MarqueeMessage } from "../utils/MarqueeMessage";
 
 export const NoMatch = () => {
   const { inProp, classNames } = usePageSetup();
+  const [numbers, setNumbers] = useState([]);
+
+  useEffect(() => {
+    const generateRandomNumbers = () => {
+      let randomNumbers = [];
+      for (let i = 0; i < 8; i++) {
+        randomNumbers.push(Math.floor(Math.random() * 500));
+      }
+      return randomNumbers;
+    };
+
+    setNumbers(generateRandomNumbers());
+  }, []);
 
   return (
     <>
@@ -18,14 +32,15 @@ export const NoMatch = () => {
         unmountOnExit
       >
         <div>
-          <Box
-            marginTop={"5vh"}
-            bg={"#04BFAD"}
-            height={"100vh"}
-            display={"flex"}
-            justifyContent={"center"}
-          >
-            <TitleText title={"No Match URL..."} size={"5vh"}></TitleText>
+          <Box marginTop={"5vh"} justifyContent={"center"} className="Pages">
+            {numbers.map((number, index) => (
+              <MarqueeMessage
+                key={index}
+                speed={number}
+                message={"Sorry...No Match URL..."}
+                size={"6vh"}
+              ></MarqueeMessage>
+            ))}
           </Box>
         </div>
       </CSSTransition>
