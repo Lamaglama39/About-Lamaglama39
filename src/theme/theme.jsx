@@ -3,17 +3,17 @@ import { mode } from "@chakra-ui/theme-tools";
 
 const breakpoints = { base: "0em", sm: "30em", md: "48em" };
 const customColors = {
-  lightButton: "#B3D6D6",
+  lightButton: "#E0E0E0",
   darkButton: "#888888",
-  lightTop: "#B3D6D6",
+  lightTop: "#B8CCD9",
   darkTop: "#888888",
-  lightPage: "#5E9696",
+  lightPage: "#93AEBF",
   darkPage: "#252525",
-  lightSkill: "#4F8586",
+  lightSkill: "#7C96A6",
   darkSkill: "#3E3E3E",
-  lightCardBox: "#B3D6D6",
+  lightCardBox: "#B8CCD9",
   darkCardBox: "#888888",
-  lightCardTop: "#4F8586",
+  lightCardTop: "#D3D3D3",
   darkCardTop: "#525252",
 };
 
