@@ -6,6 +6,7 @@ import { Box } from "@chakra-ui/react";
 
 import theme from "./theme/theme";
 import "./index.css";
+import "./App.css";
 
 import { NavigationContext } from "./components/NavigationContext";
 import { TopPage } from "./page/TopPage";
