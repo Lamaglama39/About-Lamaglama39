@@ -10,21 +10,15 @@ export const SkillIconList = () => {
     ["Infrastructure"],
   ];
   return (
-    <>
+    <Box marginBottom={["5vh", "", ""]}>
       {skillType.map((type) => (
-        <Box
-          key={type}
-          alignItems={"center"}
-          flexFlow={["row", "row", "column"]}
-          className="SkillList"
-          paddingBottom={["3vh"]}
-        >
-          <TitleText title={type} size={"24px"}></TitleText>
+        <Box key={type} paddingBottom={["1vh", "0", "0"]}>
+          <TitleText title={type} size={["18px", "24px", "32px"]}></TitleText>
           <div>
             <SkillIcon title={type}></SkillIcon>
           </div>
         </Box>
       ))}
-    </>
+    </Box>
   );
 };
