@@ -12,7 +12,7 @@ export const SkillIcon = ({ title }) => {
         <Box
           key={index}
           display="inline-block"
-          margin={["5px", "10px", "15px"]}
+          margin={["8px", "12px", "16px"]}
         >
           <Link
             href={iconData.url}
