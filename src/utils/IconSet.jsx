@@ -22,7 +22,7 @@ import { Text } from "@chakra-ui/react";
 
 const fontStyle = {
   margin: "0",
-  fontSize: ["16px"],
+  fontSize: ["12px", "12px", "16px"],
   fontWeight: ["bold"],
 };
 const iconStyle = { w: ["4vh", "5vh", "6vh"], h: ["4vh", "5vh", "6vh"] };
