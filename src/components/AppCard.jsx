@@ -12,31 +12,24 @@ export const AppCard = ({
   Name,
   AppImage,
   Description,
-  AppLink,
-  GithubLink,
+  AppLinks,
+  GithubLinks,
 }) => {
   return (
     <>
       <Card
-        w={["90%", "90%", "calc(30% - 1%)"]}
-        borderRadius={"20px"}
-        border={"solid 2px gray"}
+        w={["100%", "100%", "calc(33% - 1%)"]}
         marginBottom={"5vh"}
-        className="cardBoxTop"
+        textAlign={"center"}
       >
-        <Link href={AppLink} isExternal textAlign={"center"}>
-          <CardHeader
-            className="cardBoxTop"
-            borderTopRadius={"17px"}
-            padding={"1px"}
-          >
-            <Heading size="md" className="cardBoxTop">
-              {Name}
-            </Heading>
+        <Link href={AppLinks} isExternal textAlign={"center"}>
+          <CardHeader padding={"1px"}>
             <Image h={"15vh"} src={AppImage} alt={Name} />
           </CardHeader>
         </Link>
-        <CardBody className="cardBox" padding={"0"}>
+        <CardBody padding={"0"}>
+          <Heading fontSize={["16px", "24px", "24px"]}>{Name}</Heading>
+
           <Text margin={"10px"}>
             {Description.split("\n").map((line, idx) => (
               <React.Fragment key={idx}>
@@ -46,13 +39,8 @@ export const AppCard = ({
             ))}
           </Text>
         </CardBody>
-        <CardFooter
-          className="cardBox"
-          borderBottomRadius={"17px"}
-          justifyContent={"end"}
-          padding={"10px"}
-        >
-          <Link href={GithubLink} isExternal>
+        <CardFooter justifyContent={"end"} padding={"10px"}>
+          <Link href={GithubLinks} isExternal>
             <IconContext.Provider value={{ color: "black", size: "4vh" }}>
               <SiGithub></SiGithub>
             </IconContext.Provider>
@@ -67,6 +55,6 @@ AppCard.propTypes = {
   Name: PropTypes.string.isRequired,
   AppImage: PropTypes.string.isRequired,
   Description: PropTypes.string.isRequired,
-  AppLink: PropTypes.string.isRequired,
-  GithubLink: PropTypes.string.isRequired,
+  AppLinks: PropTypes.string.isRequired,
+  GithubLinks: PropTypes.string.isRequired,
 };

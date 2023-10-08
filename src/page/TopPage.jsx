@@ -1,5 +1,4 @@
 import { CSSTransition } from "react-transition-group";
-
 import { TopBar } from "../components/TopBar";
 import { VicugnaArea } from "../components/VicugnaArea";
 import { SkillBox } from "../components/SkillBox";
@@ -17,7 +16,6 @@ export const TopPage = () => {
         classNames={classNames}
         timeout={900}
         unmountOnExit
-        className="Pages"
       >
         <Box
           display={"flex"}

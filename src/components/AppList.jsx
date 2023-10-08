@@ -13,7 +13,6 @@ export const AppList = () => {
         flexFlow={["column", "row wrap", "row wrap"]}
         justifyContent={"space-between"}
         alignItems={"center"}
-        className="Pages"
       >
         {AppInfoList.map((App) => (
           <AppCard
