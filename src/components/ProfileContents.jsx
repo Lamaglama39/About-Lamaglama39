@@ -4,9 +4,8 @@ import { ProfileCard } from "../components/ProfileCard";
 
 export const ProfileContents = () => {
   return (
-    <>
-      <Box height={"5vh"}></Box>
-      <Box height={"95vh"} marginX={"5vh"} className="Pages">
+    <Box display={"inline-block"} marginTop={"5vh"} marginX={"5vh"}>
+      <Box display={"inline-block"} className="Pages">
         <ProfileText></ProfileText>
         <Box
           display={"flex"}
@@ -16,6 +15,6 @@ export const ProfileContents = () => {
           <ProfileCard></ProfileCard>
         </Box>
       </Box>
-    </>
+    </Box>
   );
 };
