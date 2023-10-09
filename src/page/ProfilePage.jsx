@@ -3,6 +3,7 @@ import { CSSTransition } from "react-transition-group";
 import { TopBar } from "../components/TopBar";
 import { ProfileContents } from "../components/ProfileContents";
 import { usePageSetup } from "../utils/usePageSetup";
+import { Box } from "@chakra-ui/react";
 
 export const ProfilePage = () => {
   const { inProp, classNames } = usePageSetup();
@@ -16,9 +17,14 @@ export const ProfilePage = () => {
         timeout={900}
         unmountOnExit
       >
-        <div>
+        <Box
+          display={"flex"}
+          flexFlow={["column", "column", "row"]}
+          className="Pages"
+          justifyContent={"space-between"}
+        >
           <ProfileContents></ProfileContents>
-        </div>
+        </Box>
       </CSSTransition>
     </>
   );

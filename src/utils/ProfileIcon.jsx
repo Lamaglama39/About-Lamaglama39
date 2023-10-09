@@ -2,8 +2,8 @@ import { SiGithub, SiGmail, SiQiita, SiZenn } from "react-icons/si";
 import { Icon } from "@chakra-ui/react";
 
 const iconStyle = {
-  w: ["2vh", "4vh", "6vh"],
-  h: ["2vh", "4vh", "6vh"],
+  w: ["2vh", "3vh", "4vh"],
+  h: ["2vh", "3vh", "4vh"],
   color: "black",
 };
 
