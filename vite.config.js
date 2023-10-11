@@ -1,27 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
-import svgr from "vite-plugin-svgr";
+import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    react(),
-    svgr({
-      // svgr options: https://react-svgr.com/docs/options/
-      svgrOptions: {
-        // ...
+export default defineConfig(() => {
+  return {
+    plugins: [react()],
+    build: {
+      rollupOptions: {
+        plugins: [visualizer()],
       },
-
-      // esbuild options, to transform jsx to js
-      esbuildOptions: {
-        // ...
-      },
-
-      // A minimatch pattern, or array of patterns, which specifies the files in the build the plugin should include. By default all svg files will be included.
-      include: "**/*.svg?react",
-
-      //  A minimatch pattern, or array of patterns, which specifies the files in the build the plugin should ignore. By default no files are ignored.
-      exclude: "",
-    }),
-  ],
+    },
+  };
 });
