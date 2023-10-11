@@ -1,10 +1,11 @@
 import { TopButton } from "../components/TopButton";
+import PropTypes from "prop-types";
 
 export const TopButtonList = ({ onNavigate }) => {
   const buttonNameList = [
     ["Top", "/"],
     ["Apps", "/apps"],
-    ["Profile", "/profile"],
+    ["Info", "/info"],
   ];
 
   return (
@@ -21,4 +22,8 @@ export const TopButtonList = ({ onNavigate }) => {
       })}
     </>
   );
+};
+
+TopButtonList.propTypes = {
+  onNavigate: PropTypes.string,
 };

@@ -1,18 +1,18 @@
 import { Box } from "@chakra-ui/react";
 import { TopButtonList } from "./TopButtonList";
 import { ModeIcon } from "./ModeIcon";
+import PropTypes from "prop-types";
 
 export const TopBar = ({ onNavigate }) => {
   return (
     <div>
       <Box
         width={"100%"}
-        height={"5vh"}
+        height={"3em"}
         display={"flex"}
         justifyContent={"space-between"}
         alignItems={"center"}
         position={"fixed"}
-        top="0"
         zIndex="docked"
         className="TopBar"
       >
@@ -21,4 +21,8 @@ export const TopBar = ({ onNavigate }) => {
       </Box>
     </div>
   );
+};
+
+TopBar.propTypes = {
+  onNavigate: PropTypes.string,
 };
