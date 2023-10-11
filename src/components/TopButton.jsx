@@ -13,8 +13,7 @@ export const TopButton = ({ buttonName, routeName }) => {
 
   return (
     <Text
-      fontSize={"3vh"}
-      h={"5vh"}
+      fontSize={["2em"]}
       w={"33%"}
       className={isCurrentPage ? "TopButton" : "none"}
       textAlign={"center"}
