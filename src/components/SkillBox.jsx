@@ -1,24 +1,29 @@
 import { Box } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import { SkillIconList } from "./SkillIconList";
+import { ScrollTargetButton } from "./ScrollTargetButton";
 
 export const SkillBox = () => {
   return (
     <>
-      <Box
-        width={["100%", "100%", "35%"]}
-        textAlign={"center"}
-        marginTop={["0", "0", "5vh"]}
-        marginBottom={["10vh", "10vh", "0"]}
-      >
+      <Box width={["100%"]} textAlign={"center"} marginBottom={["5vh"]}>
         <Text
-          fontSize={["32px", "40px", "48px"]}
+          fontSize={["2em", "2.5em", "3em"]}
           margin={"0"}
           fontWeight={"bold"}
+          className={"skill-title"}
         >
           Skill Set
         </Text>
         <SkillIconList></SkillIconList>
+        <ScrollTargetButton
+          text={"🦙Play With Lama?🦙"}
+          target={".top-title"}
+          offsets={"20"}
+          styleProps={{
+            marginTop: "5vh",
+          }}
+        />
       </Box>
     </>
   );
