@@ -1,5 +1,6 @@
 import { Button } from "@chakra-ui/react";
 import { animateScroll as scroll } from "react-scroll";
+import PropTypes from "prop-types";
 
 export const ScrollBottomButton = ({ text }) => {
   return (
@@ -16,4 +17,8 @@ export const ScrollBottomButton = ({ text }) => {
       {text}
     </Button>
   );
+};
+
+ScrollBottomButton.propTypes = {
+  text: PropTypes.string.isRequired,
 };
