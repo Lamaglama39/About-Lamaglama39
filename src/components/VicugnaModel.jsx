@@ -36,7 +36,7 @@ const VicugnaModel = () => {
       <Canvas
         style={{ height: "100vh" }}
         camera={{ position: [10, 5, 10] }}
-        antialias
+        antialias="true"
       >
         <OrbitControls />
         <ambientLight intensity={0.5} />
