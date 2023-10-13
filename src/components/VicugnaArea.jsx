@@ -1,31 +1,36 @@
-import { Box, Text, useMediaQuery } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import VicugnaModel from "./VicugnaModel";
-import { ScrollBottomButton } from "../components/ScrollBottomButton";
+import { ScrollTargetButton } from "./ScrollTargetButton";
 
 export const VicugnaArea = () => {
-  // Check the current viewport width.
-  const [isLargerThanMD] = useMediaQuery("(min-width: 48em)"); // Adjust the value as per your requirement.
-
   return (
     <>
-      <Box
-        width={["100%", "100%", "75%"]}
-        textAlign={"center"}
-        position={"relative"}
-      >
+      <Box width={["100%"]} textAlign={"center"} position={"relative"}>
         <Text
-          fontSize={["32px", "40px", "48px"]}
+          fontSize={["2em", "2.5em", "3em"]}
           fontWeight={"bold"}
           position={"absolute"}
-          top={["8vh"]}
+          top={["2em"]}
           left={["50%"]}
           transform={["translate(-50%, -50%)"]}
+          className={"top-title"}
         >
-          I&apos;am <br /> Lamaglama39...
+          Hi!
+          <br />
+          I&apos;am&nbsp;Lamaglama39
         </Text>
         <VicugnaModel></VicugnaModel>
-        {/* Display ScrollBottomButton only when the viewport width is less than the md breakpoint */}
-        {!isLargerThanMD && <ScrollBottomButton text={"🦙What Skills?🦙"} />}
+        <ScrollTargetButton
+          text={"📜What I can do...📜"}
+          target={".skill-title"}
+          offsets={"5"}
+          styleProps={{
+            position: "absolute",
+            top: "85%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        />
       </Box>
     </>
   );
