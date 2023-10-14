@@ -18,19 +18,33 @@ export const AppCard = ({
   return (
     <>
       <Card
-        w={["100%", "100%", "calc(33% - 1%)"]}
-        marginBottom={"5vh"}
+        w={["100%", "calc(49% - 1%)", "calc(33% - 1%)"]}
+        marginBottom={"1.5em"}
         textAlign={"center"}
+        className={"cardBox"}
+        borderRadius={"0.5em"}
       >
         <Link href={AppLinks} isExternal textAlign={"center"}>
-          <CardHeader padding={"1px"}>
-            <Image h={"15vh"} src={AppImage} alt={Name} />
+          <CardHeader
+            padding={"0"}
+            className={"cardBox"}
+            borderRadius={"0.5em"}
+          >
+            <Image
+              w={"100%"}
+              objectFit="cover"
+              borderTopRadius={"0.5em"}
+              src={AppImage}
+              alt={Name}
+            />
           </CardHeader>
         </Link>
-        <CardBody padding={"0"}>
-          <Heading fontSize={["16px", "24px", "24px"]}>{Name}</Heading>
+        <CardBody padding={"0"} className={"cardBox"}>
+          <Heading fontSize={["1.5em"]} margin={"0"}>
+            {Name}
+          </Heading>
 
-          <Text margin={"10px"}>
+          <Text marginX={"1.5em"} fontSize={"1em"} textAlign={"left"}>
             {Description.split("\n").map((line, idx) => (
               <React.Fragment key={idx}>
                 {line}
@@ -39,9 +53,14 @@ export const AppCard = ({
             ))}
           </Text>
         </CardBody>
-        <CardFooter justifyContent={"end"} padding={"10px"}>
+        <CardFooter
+          justifyContent={"end"}
+          padding={"0.5em"}
+          className={"cardBox"}
+          borderBottomRadius={"0.5em"}
+        >
           <Link href={GithubLinks} isExternal>
-            <IconContext.Provider value={{ color: "black", size: "4vh" }}>
+            <IconContext.Provider value={{ size: "2em" }}>
               <SiGithub></SiGithub>
             </IconContext.Provider>
           </Link>
