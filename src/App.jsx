@@ -2,16 +2,15 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-import { Box } from "@chakra-ui/react";
-
 import theme from "./theme/theme";
 import "./index.css";
 import "./App.css";
 
+import { TopBar } from "./components/TopBar";
 import { NavigationContext } from "./components/NavigationContext";
 import { TopPage } from "./page/TopPage";
 import { AppsPage } from "./page/AppsPage";
-import { ProfilePage } from "./page/ProfilePage";
+import { InfoPage } from "./page/InfoPage";
 import { NoMatch } from "./page/NoMatchPage";
 
 export const App = () => {
@@ -31,14 +30,15 @@ export const App = () => {
       value={{ navigate: handleExitAndNavigate, setInProp, inProp }}
     >
       <ChakraProvider resetCSS={false} theme={theme}>
-        <Box>
+        <div>
+          <TopBar></TopBar>
           <Routes>
             <Route path="/" element={<TopPage />} />
             <Route path="/apps" element={<AppsPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/info" element={<InfoPage />} />
             <Route path="*" element={<NoMatch />} />
           </Routes>
-        </Box>
+        </div>
       </ChakraProvider>
     </NavigationContext.Provider>
   );

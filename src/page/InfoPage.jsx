@@ -1,29 +1,25 @@
+import { useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 
-import { TopBar } from "../components/TopBar";
-import { ProfileContents } from "../components/ProfileContents";
+import { InfoContents } from "../components/InfoContents";
 import { usePageSetup } from "../utils/usePageSetup";
 import { Box } from "@chakra-ui/react";
 
-export const ProfilePage = () => {
+export const InfoPage = () => {
   const { inProp, classNames } = usePageSetup();
+  const nodeRef = useRef(null);
 
   return (
     <>
-      <TopBar></TopBar>
       <CSSTransition
+        nodeRef={nodeRef}
         in={inProp}
         classNames={classNames}
         timeout={900}
         unmountOnExit
       >
-        <Box
-          display={"flex"}
-          flexFlow={["column", "column", "row"]}
-          className="Pages"
-          justifyContent={"space-between"}
-        >
-          <ProfileContents></ProfileContents>
+        <Box ref={nodeRef} className="Pages" justifyContent={"space-between"}>
+          <InfoContents></InfoContents>
         </Box>
       </CSSTransition>
     </>
