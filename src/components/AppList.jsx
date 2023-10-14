@@ -1,18 +1,18 @@
 import { Box } from "@chakra-ui/react";
 import { AppCard } from "./AppCard";
 import { AppInfoList } from "../utils/AppInfoList";
+import { forwardRef } from "react";
 
-export const AppList = () => {
+export const AppList = forwardRef((props, ref) => {
   return (
     <>
-      <Box height={"5vh"}></Box>
+      <Box height={"3em"}></Box>
       <Box
-        paddingTop={"5vh"}
-        paddingX={"5vh"}
+        padding={"1.5em"}
         display={"flex"}
         flexFlow={["column", "row wrap", "row wrap"]}
         justifyContent={"space-between"}
-        alignItems={"center"}
+        ref={ref}
       >
         {AppInfoList.map((App) => (
           <AppCard
@@ -27,4 +27,6 @@ export const AppList = () => {
       </Box>
     </>
   );
-};
+});
+
+AppList.displayName = "AppList";
