@@ -2,17 +2,17 @@ import React from "react";
 import { TitleText } from "../components/TitleText";
 import { Text } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/react";
-import { ProfileTopContents } from "../utils/ProfileTopContents";
+import { InfoTopContents } from "../utils/InfoTopContents";
 
-export const ProfileText = () => {
+export const InfoText = () => {
   return (
     <Box w="100%">
       <TitleText
-        title={ProfileTopContents.Name}
-        size={["24px", "32px", "40px"]}
+        title={InfoTopContents.Name}
+        size={["2em", "2em", "2.5em"]}
       ></TitleText>
-      <Text fontSize={["16px", "16px", "24px"]}>
-        {ProfileTopContents.Comment.split("\n").map((line, idx) => (
+      <Text fontSize={["1em", "1em", "1.5em"]}>
+        {InfoTopContents.Comment.split("\n").map((line, idx) => (
           <React.Fragment key={idx}>
             {line}
             <br />

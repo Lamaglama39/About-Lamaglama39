@@ -1,20 +1,19 @@
 import { Box } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import { Link } from "@chakra-ui/react";
-import { ProfileIcon } from "../utils/ProfileIcon";
+import { InfoIcon } from "../utils/InfoIcon";
 
-export const ProfileCardList = ({ IconName, UrlLink }) => {
-  const IconComponent = ProfileIcon[IconName];
+export const InfoCardList = ({ IconName, UrlLink }) => {
+  const IconComponent = InfoIcon[IconName];
 
   return (
-    <Link href={UrlLink} isExternal marginRight={["", "", "6vh"]}>
+    <Link href={UrlLink} isExternal>
       <Box
-        border={"2px solid black"}
-        padding={"2vh"}
+        padding={"1em"}
         display={"flex"}
         textAlign={"center"}
-        borderRadius={"15px"}
-        marginTop={"2vh"}
+        borderRadius={"0.5em"}
+        marginTop={"0.5em"}
         className="cardBox"
       >
         {IconComponent}
@@ -23,7 +22,7 @@ export const ProfileCardList = ({ IconName, UrlLink }) => {
   );
 };
 
-ProfileCardList.propTypes = {
+InfoCardList.propTypes = {
   IconName: PropTypes.string.isRequired,
   UrlLink: PropTypes.string.isRequired,
 };

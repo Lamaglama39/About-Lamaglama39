@@ -1,5 +1,5 @@
-export const ProfileTopContents = {
+export const InfoTopContents = {
   Name: "Lamaglama39",
   Comment:
-    "フロントエンドからバックエンド、それからインフラまで...。\n楽しいwebアプリケーションを作るためにはなんでもしたい!!!\nそんな感じで日々を過ごしています。お仕事のお話はGメールまでどうぞ～。",
+    "1998.07.29\n三度の飯より甲殻類が好き。\n東東京に生息しているインフラエンジニアです。",
 };
