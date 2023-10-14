@@ -1,18 +1,18 @@
 import { Box } from "@chakra-ui/react";
-import { ProfileText } from "../components/ProfileText";
-import { ProfileCard } from "../components/ProfileCard";
+import { InfoText } from "../components/InfoText";
+import { InfoCard } from "../components/InfoCard";
 
-export const ProfileContents = () => {
+export const InfoContents = () => {
   return (
-    <Box display={"inline-block"} marginTop={"5vh"} marginX={"5vh"}>
+    <Box display={"inline-block"} marginTop={"4em"} marginX={"2em"}>
       <Box display={"inline-block"} className="Pages">
-        <ProfileText></ProfileText>
+        <InfoText></InfoText>
         <Box
           display={"flex"}
           flexFlow={["row wrap"]}
-          justifyContent={["space-around", "space-around", "left"]}
+          justifyContent={["space-evenly"]}
         >
-          <ProfileCard></ProfileCard>
+          <InfoCard></InfoCard>
         </Box>
       </Box>
     </Box>

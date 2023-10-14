@@ -3,7 +3,7 @@ import { IconContext } from "react-icons";
 import { SiGithub, SiGmail, SiQiita, SiZenn } from "react-icons/si";
 import PropTypes from "prop-types";
 
-export const ProfileInfoIcon = ({ IconName, UrlLink }) => {
+export const InfoIcon = ({ IconName, UrlLink }) => {
   const iconMapping = {
     SiGithub: <SiGithub />,
     SiGmail: <SiGmail />,
@@ -22,7 +22,7 @@ export const ProfileInfoIcon = ({ IconName, UrlLink }) => {
   );
 };
 
-ProfileInfoIcon.propTypes = {
+InfoIcon.propTypes = {
   IconName: PropTypes.string.isRequired,
   UrlLink: PropTypes.string.isRequired,
 };

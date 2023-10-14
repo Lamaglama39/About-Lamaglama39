@@ -1,15 +1,15 @@
-import { SiGithub, SiGmail, SiQiita, SiZenn } from "react-icons/si";
+import { SiGithub, SiQiita, SiZenn } from "react-icons/si";
+import { RiTwitterXFill } from "react-icons/ri";
 import { Icon } from "@chakra-ui/react";
 
 const iconStyle = {
-  w: ["2vh", "3vh", "4vh"],
-  h: ["2vh", "3vh", "4vh"],
-  color: "black",
+  w: ["1.5em", "1.5em", "2em"],
+  h: ["1.5em", "1.5em", "2em"],
 };
 
-export const ProfileIcon = {
+export const InfoIcon = {
   SiGithub: <Icon as={SiGithub} {...iconStyle} />,
-  SiGmail: <Icon as={SiGmail} {...iconStyle} />,
+  RiTwitter: <Icon as={RiTwitterXFill} {...iconStyle} />,
   SiQiita: <Icon as={SiQiita} {...iconStyle} />,
   SiZenn: <Icon as={SiZenn} {...iconStyle} />,
 };
