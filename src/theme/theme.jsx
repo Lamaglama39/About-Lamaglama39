@@ -12,12 +12,15 @@ const customColors = {
   lightSkill: "#7C96A6",
   darkSkill: "#3E3E3E",
   lightCardBox: "#B8CCD9",
-  darkCardBox: "#888888",
-  lightCardTop: "#D3D3D3",
-  darkCardTop: "#525252",
+  darkCardBox: "#2d3540",
 };
 
 const theme = extendTheme({
+  fonts: {
+    body: `Inter, system-ui, Avenir, Helvetica, Arial, sans-serif`,
+    heading: `Inter, system-ui, Avenir, Helvetica, Arial, sans-serif`,
+    mono: `Inter, system-ui, Avenir, Helvetica, Arial, sans-serif`,
+  },
   config: {
     initialColorMode: "dark",
     useSystemColorMode: false,
@@ -39,9 +42,6 @@ const theme = extendTheme({
       },
       ".cardBox": {
         bg: mode(customColors.lightCardBox, customColors.darkCardBox)(props),
-      },
-      ".cardBoxTop": {
-        bg: mode(customColors.lightCardTop, customColors.darkCardTop)(props),
       },
     }),
   },
