@@ -12,7 +12,7 @@ export const usePageSetup = () => {
   const classNames = useBreakpointValue({
     base: "slideY",
     sm: "slideY",
-    md: "slideX",
+    md: "slideY",
   });
 
   return { inProp, classNames };

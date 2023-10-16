@@ -3,7 +3,7 @@ import { Text } from "@chakra-ui/react";
 
 export const TitleText = ({ title, size }) => {
   return (
-    <Text fontWeight={"bold"} fontSize={size} padding={"1vh"} margin={"0"}>
+    <Text fontWeight={"bold"} fontSize={size} margin={"0"}>
       {title}
     </Text>
   );
@@ -11,5 +11,9 @@ export const TitleText = ({ title, size }) => {
 
 TitleText.propTypes = {
   title: PropTypes.string.isRequired,
-  size: PropTypes.string.isRequired,
+  size: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+    PropTypes.object,
+  ]).isRequired,
 };
