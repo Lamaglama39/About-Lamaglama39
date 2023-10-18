@@ -6,7 +6,7 @@ import { App } from "./App";
 const rootElement = document.getElementById("root");
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/About-Lamaglama39">
       <App></App>
     </BrowserRouter>
   </React.StrictMode>
