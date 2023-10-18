@@ -22,24 +22,27 @@ import { Text } from "@chakra-ui/react";
 
 const fontStyle = {
   margin: "0",
-  fontSize: ["12px", "12px", "16px"],
+  fontSize: ["1em"],
   fontWeight: ["bold"],
 };
-const iconStyle = { w: ["4vh", "5vh", "6vh"], h: ["4vh", "5vh", "6vh"] };
+const iconStyle = {
+  w: ["2.5em", "2.5em", "3em"],
+  h: ["2.5em", "2.5em", "3em"],
+};
 const iconColor = {
   Javascript: "yellow.400",
   TypeScript: "blue.500",
   Python: "cyan.700",
   // Bash: "black",
-  React: "cyan.400",
+  React: "cyan.500",
   // NextJs: "black",
   Blender: "orange.400",
-  ThreeJs: "green.300",
+  ThreeJs: "green.600",
   NodeJs: "green.600",
   // Deno: "black",
   // Flask: "black",
   MySQL: "blue.600",
-  AWS: "orange.300",
+  AWS: "orange.400",
   Firebase: "orange.500",
   Docker: "blue.500",
   Terraform: "purple.500",
