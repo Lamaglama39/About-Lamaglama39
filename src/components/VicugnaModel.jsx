@@ -6,7 +6,7 @@ import { Box3, Vector3 } from "three";
 import { OrbitControls } from "@react-three/drei";
 
 const Model = () => {
-  const gltf = useLoader(GLTFLoader, "../public/LamaGlama.glb");
+  const gltf = useLoader(GLTFLoader, "/model/LamaGlama.glb");
   const mesh = useRef();
 
   useFrame(() => {
