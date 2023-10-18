@@ -5,6 +5,8 @@ import { visualizer } from "rollup-plugin-visualizer";
 // https://vitejs.dev/config/
 export default defineConfig(() => {
   return {
+    // Github Pagesデプロイ用設定
+    base: process.env.GITHUB_PAGES ? "About-Lamaglama39" : "./",
     plugins: [react()],
     build: {
       rollupOptions: {
