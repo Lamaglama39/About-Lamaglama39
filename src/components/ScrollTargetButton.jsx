@@ -19,7 +19,7 @@ export const ScrollTargetButton = ({ text, target, offsets, styleProps }) => {
     <Button
       bg={"none"}
       border={"none"}
-      padding={"1em"}
+      padding={[["1em"]]}
       fontSize={["2em", "2em", "2.5em"]}
       {...styleProps}
       onClick={scrollToTarget}

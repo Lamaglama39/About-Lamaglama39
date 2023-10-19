@@ -17,7 +17,7 @@ export const SkillBox = () => {
         </Text>
         <SkillIconList></SkillIconList>
         <ScrollTargetButton
-          text={"🦙Play With Lama?🦙"}
+          text={"🦙Play With Lama🦙"}
           target={".top-title"}
           offsets={"20"}
           styleProps={{
