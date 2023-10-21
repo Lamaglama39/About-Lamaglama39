@@ -12,6 +12,10 @@
     "git": "git add . && git commit && git push origin main"
   },
   "dependencies": {
+    "@babel/helper-define-polyfill-provider": "0.4.3",
+    "@babel/plugin-transform-runtime": "7.23.2",
+    "@babel/preset-env": "7.23.2",
+    "@babel/traverse": "7.23.2",
     "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
     "@chakra-ui/theme-tools": "^2.1.1",
@@ -19,7 +23,12 @@
     "@emotion/styled": "^11.11.0",
     "@react-three/drei": "^9.86.3",
     "@react-three/fiber": "^8.14.4",
+    "babel-plugin-polyfill-corejs2": "0.4.6",
+    "babel-plugin-polyfill-corejs3": "0.8.5",
+    "babel-plugin-polyfill-es-shims": "0.10.0",
+    "babel-plugin-polyfill-regenerator": "0.5.3",
     "framer-motion": "^10.16.4",
+    "postcss": "8.4.31",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
