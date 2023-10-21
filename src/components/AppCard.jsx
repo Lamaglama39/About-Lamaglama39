@@ -28,7 +28,7 @@ export const AppCard = ({
           <CardHeader
             padding={"0"}
             className={"cardBox"}
-            borderRadius={"0.5em"}
+            borderTopRadius={"0.5em"}
           >
             <Image
               w={"100%"}

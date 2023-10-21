@@ -6,7 +6,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 export default defineConfig(() => {
   return {
     // Github Pagesデプロイ用設定
-    base: process.env.GITHUB_PAGES ? "About-Lamaglama39" : "./",
+    base: "/About-Lamaglama39",
     plugins: [react()],
     build: {
       rollupOptions: {
