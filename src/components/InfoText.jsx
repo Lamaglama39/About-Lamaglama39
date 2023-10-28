@@ -6,7 +6,13 @@ import { InfoTopContents } from "../utils/InfoTopContents";
 
 export const InfoText = () => {
   return (
-    <Box w="100%">
+    <Box
+      w="100%"
+      alignItems={"center"}
+      justifyContent={"center"}
+      flexDirection={"column"}
+      marginTop={["5em"]}
+    >
       <TitleText
         title={InfoTopContents.Name}
         size={["2em", "2em", "2.5em"]}
