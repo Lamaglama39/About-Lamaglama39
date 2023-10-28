@@ -13,7 +13,6 @@ export const InfoCardList = ({ IconName, UrlLink }) => {
         display={"flex"}
         textAlign={"center"}
         borderRadius={"0.5em"}
-        marginTop={"0.5em"}
         className="cardBox"
       >
         {IconComponent}

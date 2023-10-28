@@ -4,14 +4,15 @@ import { InfoCard } from "../components/InfoCard";
 
 export const InfoContents = () => {
   return (
-    <Box display={"inline-block"} marginTop={"4em"} marginX={"2em"}>
-      <Box display={"inline-block"} className="Pages">
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Box className="Pages">
         <InfoText></InfoText>
-        <Box
-          display={"flex"}
-          flexFlow={["row wrap"]}
-          justifyContent={["space-evenly"]}
-        >
+        <Box display="flex" flexFlow="row wrap" justifyContent="space-between">
           <InfoCard></InfoCard>
         </Box>
       </Box>
