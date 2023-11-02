@@ -21,8 +21,9 @@ export const InfoMailForm = () => {
     try {
       // メール送信用のAPI関数
       const response = await InfoMailAPI({
-        name: values.name,
         email: values.mail,
+        title: values.title,
+        contents: values.contents,
       });
 
       if (response.error) {
@@ -47,21 +48,7 @@ export const InfoMailForm = () => {
       marginTop={["3em", "3em", "10em"]}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl isInvalid={errors.name} w={["60vw", "50vw", "40vw"]}>
-          <FormLabel htmlFor="name" fontSize={"1.5em"}>
-            お名前
-          </FormLabel>
-          <Input
-            w={"100%"}
-            id="name"
-            placeholder="お名前を入力してください。"
-            {...register("name", {
-              required: "必須項目です...。",
-            })}
-          />
-          <FormErrorMessage>
-            {errors.name && errors.name.message}
-          </FormErrorMessage>
+        <FormControl isInvalid={errors.mail} w={["60vw", "50vw", "40vw"]}>
           <FormLabel htmlFor="mail" fontSize={"1.5em"}>
             メールアドレス
           </FormLabel>
@@ -74,8 +61,28 @@ export const InfoMailForm = () => {
             })}
           />
           <FormErrorMessage>
-            {errors.name && errors.name.message}
+            {errors.mail && errors.mail.message}
           </FormErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={errors.title} w={["60vw", "50vw", "40vw"]}>
+          <FormLabel htmlFor="title" fontSize={"1.5em"}>
+            件名
+          </FormLabel>
+          <Input
+            w={"100%"}
+            id="title"
+            placeholder="件名を入力してください。"
+            {...register("title", {
+              required: "必須項目です...。",
+            })}
+          />
+          <FormErrorMessage>
+            {errors.title && errors.title.message}
+          </FormErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={errors.contents} w={["60vw", "50vw", "40vw"]}>
           <FormLabel htmlFor="contents" fontSize={"1.5em"}>
             お問い合わせ内容
           </FormLabel>
@@ -89,7 +96,7 @@ export const InfoMailForm = () => {
             })}
           />
           <FormErrorMessage>
-            {errors.name && errors.name.message}
+            {errors.contents && errors.contents.message}
           </FormErrorMessage>
         </FormControl>
         <Button
