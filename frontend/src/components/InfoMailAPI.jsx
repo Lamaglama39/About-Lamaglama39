@@ -10,7 +10,7 @@ export async function InfoMailAPI(emailData) {
     return { status: response.status };
   } catch (error) {
     if (error.response && error.response.status) {
-      // サーバーからのレスポンスがある場合、エラーステータスを返す
+      // サーバーからのレスポンスがある場合のエラー
       return { error: error.response.status };
     }
     // その他のエラー
