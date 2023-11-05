@@ -17,6 +17,7 @@
 html {
   overflow: scroll;
   overflow-x: hidden;
+  user-select: none;
 }
 
 html, body {
