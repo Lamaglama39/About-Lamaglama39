@@ -2,7 +2,6 @@ import { useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import { Box } from "@chakra-ui/react";
 
-import { InfoContents } from "../components/InfoContents";
 import { usePageSetup } from "../utils/usePageSetup";
 import { InfoMailForm } from "../components/InfoMailForm";
 
@@ -28,7 +27,6 @@ export const InfoPage = () => {
           justifyContent={"space-between"}
           alignItems="center"
         >
-          <InfoContents />
           <InfoMailForm />
         </Box>
       </CSSTransition>
