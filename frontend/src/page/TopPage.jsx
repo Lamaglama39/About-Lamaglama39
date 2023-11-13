@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import { VicugnaArea } from "../components/VicugnaArea";
-import { SkillBox } from "../components/SkillBox";
 import { Box } from "@chakra-ui/react";
 import { usePageSetup } from "../utils/usePageSetup";
 
@@ -26,7 +25,6 @@ export const TopPage = () => {
           className="Pages"
         >
           <VicugnaArea></VicugnaArea>
-          <SkillBox></SkillBox>
         </Box>
       </CSSTransition>
     </>
