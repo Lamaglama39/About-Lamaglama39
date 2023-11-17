@@ -3,8 +3,8 @@ import { mode } from "@chakra-ui/theme-tools";
 
 const breakpoints = { base: "0em", sm: "30em", md: "48em" };
 const customColors = {
-  lightButton: "#E0E0E0",
-  darkButton: "#888888",
+  lightButton: "#589A8D",
+  darkButton: "#146551",
   lightTop: "#B8CCD9",
   darkTop: "#888888",
   lightPage: "#93AEBF",
@@ -42,6 +42,9 @@ const theme = extendTheme({
       },
       ".cardBox": {
         bg: mode(customColors.lightCardBox, customColors.darkCardBox)(props),
+      },
+      ".selectButton": {
+        bg: mode(customColors.lightButton, customColors.darkButton)(props),
       },
     }),
   },
