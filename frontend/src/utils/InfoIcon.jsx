@@ -3,8 +3,8 @@ import { RiTwitterXFill } from "react-icons/ri";
 import { Icon } from "@chakra-ui/react";
 
 const iconStyle = {
-  w: ["1.5em", "1.5em", "2em"],
-  h: ["1.5em", "1.5em", "2em"],
+  w: ["2em"],
+  h: ["2em"],
 };
 
 export const InfoIcon = {

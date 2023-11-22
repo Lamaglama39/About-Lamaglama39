@@ -9,10 +9,11 @@ export const InfoContents = () => {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
+      w={"100%"}
     >
       <Box className="Pages">
         <InfoText></InfoText>
-        <Box display="flex" flexFlow="row wrap" justifyContent="space-between">
+        <Box display="flex" flexFlow="row wrap" justifyContent="space-evenly">
           <InfoCard></InfoCard>
         </Box>
       </Box>
