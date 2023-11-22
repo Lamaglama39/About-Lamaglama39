@@ -7,8 +7,17 @@ export const InfoCardList = ({ IconName, UrlLink }) => {
   const IconComponent = InfoIcon[IconName];
 
   return (
-    <Link href={UrlLink} isExternal>
+    <Link
+      href={UrlLink}
+      isExternal
+      _hover={{
+        textDecoration: "none",
+        filter: "brightness(1.5)",
+        transition: "0.3s",
+      }}
+    >
       <Box
+        margin={"0.5em"}
         padding={"1em"}
         display={"flex"}
         textAlign={"center"}

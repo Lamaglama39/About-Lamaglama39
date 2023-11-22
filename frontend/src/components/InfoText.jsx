@@ -13,11 +13,8 @@ export const InfoText = () => {
       flexDirection={"column"}
       marginTop={["5em"]}
     >
-      <TitleText
-        title={InfoTopContents.Name}
-        size={["2em", "2em", "2.5em"]}
-      ></TitleText>
-      <Text fontSize={["1em", "1em", "1.5em"]}>
+      <TitleText title={InfoTopContents.Name} size={["2.5em"]}></TitleText>
+      <Text fontSize={["1.5em"]}>
         {InfoTopContents.Comment.split("\n").map((line, idx) => (
           <React.Fragment key={idx}>
             {line}
