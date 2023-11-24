@@ -22,6 +22,11 @@ export const SkillIcon = ({ title }) => {
             alignItems="center"
             h={["3.5em", "3.5em", "4em"]}
             w={["3.5em", "3.5em", "4em"]}
+            _hover={{
+              textDecoration: "none",
+              filter: "brightness(1.5)",
+              transition: "0.3s",
+            }}
           >
             {iconData.icon}
             {iconData.name}

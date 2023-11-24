@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import { Text } from "@chakra-ui/react";
 
-export const TitleText = ({ title, size }) => {
+export const TitleText = ({ title, size, styleProps }) => {
   return (
-    <Text fontWeight={"bold"} fontSize={size} margin={"0"}>
+    <Text fontWeight={"bold"} fontSize={size} margin={"0"} style={styleProps}>
       {title}
     </Text>
   );
@@ -16,4 +16,5 @@ TitleText.propTypes = {
     PropTypes.array,
     PropTypes.object,
   ]).isRequired,
+  styleProps: PropTypes.any,
 };

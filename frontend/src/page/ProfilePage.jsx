@@ -26,7 +26,7 @@ export const ProfilePage = () => {
           flexDirection={["column", "column", "row"]}
           justifyContent={["center"]}
           alignItems="flex-start"
-          marginX={["2em"]}
+          paddingX={["0", "0", "10vw"]}
           gap={["0", "0", "5vw"]}
         >
           <InfoContents />

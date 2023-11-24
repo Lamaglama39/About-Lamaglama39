@@ -6,7 +6,7 @@ export const SkillIconList = () => {
   const skillType = ["Languages", "Frontend", "Backend", "Infrastructure"];
 
   return (
-    <Box>
+    <Box textAlign={"center"}>
       {skillType.map((type) => (
         <Box key={type}>
           <TitleText title={type} size={["1.5em", "2em", "2em"]}></TitleText>
