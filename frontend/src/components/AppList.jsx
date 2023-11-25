@@ -6,9 +6,9 @@ import { forwardRef } from "react";
 export const AppList = forwardRef((props, ref) => {
   return (
     <>
-      <Box height={"5em"}></Box>
+      <Box height={"4em"}></Box>
       <Box
-        padding={"1.5em"}
+        padding={"2em"}
         display={"flex"}
         flexFlow={["column", "row wrap", "row wrap"]}
         justifyContent={"space-between"}

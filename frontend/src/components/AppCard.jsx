@@ -18,8 +18,8 @@ export const AppCard = ({
   return (
     <>
       <Card
-        w={["100%", "calc(49% - 1%)", "calc(33% - 1%)"]}
-        marginBottom={"1.5em"}
+        w={["100%", "100%", "calc(33% - 1%)"]}
+        marginBottom={"2em"}
         textAlign={"center"}
         className={"cardBox"}
         borderRadius={"0.5em"}
