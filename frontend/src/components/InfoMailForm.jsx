@@ -7,6 +7,7 @@ import {
   Button,
   Box,
 } from "@chakra-ui/react";
+import { Textarea } from "@chakra-ui/react";
 import { InfoMailAPI } from "./InfoMailAPI";
 
 export const InfoMailForm = () => {
@@ -45,10 +46,13 @@ export const InfoMailForm = () => {
       display={"flex"}
       justifyContent={"center"}
       alignItems={"center"}
-      marginTop={["3em", "3em", "10em"]}
+      textAlign={"center"}
+      marginTop={["5em"]}
+      marginX={"auto"}
+      w={["60vw", "50vw", "40vw"]}
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl isInvalid={errors.mail} w={["60vw", "50vw", "40vw"]}>
+      <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+        <FormControl isInvalid={errors.mail} marginBottom={"1em"}>
           <FormLabel htmlFor="mail" fontSize={"1.5em"}>
             メールアドレス
           </FormLabel>
@@ -65,7 +69,7 @@ export const InfoMailForm = () => {
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={errors.title} w={["60vw", "50vw", "40vw"]}>
+        <FormControl isInvalid={errors.title} marginBottom={"1em"}>
           <FormLabel htmlFor="title" fontSize={"1.5em"}>
             件名
           </FormLabel>
@@ -82,25 +86,26 @@ export const InfoMailForm = () => {
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={errors.contents} w={["60vw", "50vw", "40vw"]}>
+        <FormControl isInvalid={errors.contents} marginBottom={"1em"}>
           <FormLabel htmlFor="contents" fontSize={"1.5em"}>
             お問い合わせ内容
           </FormLabel>
-          <Input
-            w={"100%"}
+          <Textarea
+            resize={"none"}
             h={"15em"}
             id="contents"
             placeholder="お問い合わせ内容を入力してください。"
             {...register("contents", {
               required: "必須項目です...。",
             })}
+            fontFamily={`Inter, system-ui, Avenir, Helvetica, Arial, sans-serif`}
           />
           <FormErrorMessage>
             {errors.contents && errors.contents.message}
           </FormErrorMessage>
         </FormControl>
         <Button
-          marginTop={"1em"}
+          marginTop={"2em"}
           colorScheme="teal"
           isLoading={isSubmitting}
           type="submit"
