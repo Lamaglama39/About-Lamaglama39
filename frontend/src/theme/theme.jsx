@@ -5,12 +5,12 @@ const breakpoints = { base: "0em", sm: "30em", md: "48em" };
 const customColors = {
   lightButton: "#589A8D",
   darkButton: "#146551",
-  lightTop: "#B8CCD9",
-  darkTop: "#888888",
-  lightPage: "#93AEBF",
-  darkPage: "#252525",
-  lightSkill: "#7C96A6",
-  darkSkill: "#3E3E3E",
+  lightTop: "#3CA6A6",
+  darkTop: "#024959",
+  lightPage: "#c8e6e6",
+  darkPage: "#0a190a",
+  lightSkill: "#026773",
+  darkSkill: "#012E40",
   lightCardBox: "#B8CCD9",
   darkCardBox: "#2d3540",
 };
