@@ -15,9 +15,14 @@
 }
 
 html {
-  overflow: scroll;
+  overflow-y: scroll;
   overflow-x: hidden;
+  scrollbar-width: none; /* Firefoxのスクロールバーを非表示にする */
   user-select: none;
+}
+
+html::-webkit-scrollbar {
+  display: none; /* WebKitブラウザ（Chrome, Safariなど）のスクロールバーを非表示にする */
 }
 
 html, body {
