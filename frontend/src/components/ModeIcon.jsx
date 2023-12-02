@@ -10,8 +10,9 @@ export const ModeIcon = () => {
       border={"none"}
       bg={"none"}
       position={"fixed"}
-      top="4em"
-      right={"1em"}
+      top={["0em", "0", "4em"]}
+      marginY={["0.25em"]}
+      right={["0.25em", "0.25em", "1em"]}
     >
       {colorMode === "light" ? (
         <MoonIcon fontSize={"2em"} />
