@@ -41,6 +41,7 @@ export const ArticleCard = ({
         display={"flex"}
         alignItems={"center"}
         fontSize={"1em"}
+        whiteSpace="normal"
       >
         <CiShoppingTag />
         {tag.name}
@@ -60,7 +61,7 @@ export const ArticleCard = ({
   }
 
   const StatBox = ({ icon, count }) => (
-    <Box w={"33%"} alignItems={"center"} display={"flex"}>
+    <Box flexGrow={1} flexShrink={1} alignItems={"center"} display={"flex"}>
       <Box alignItems={"center"} marginRight="0.5em">
         {icon}
       </Box>
@@ -101,7 +102,7 @@ export const ArticleCard = ({
                 更新日: {formatDateTime(updated_at)}
               </Text>
             </Text>
-            <Box fontSize={"1em"} display={"flex"}>
+            <Box fontSize={"1em"} display={"flex"} flexWrap="wrap">
               {tags.map((tag, index) => createTagIcon(tag, index))}
             </Box>
           </CardBody>
