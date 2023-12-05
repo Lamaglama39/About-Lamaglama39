@@ -23,8 +23,8 @@ export const InfoPage = () => {
           className="Pages"
           display="flex"
           flexDirection={["column", "column", "row"]}
-          justifyContent={"space-between"}
-          h={"auto"}
+          minH={"100vh"}
+          w={"100%"}
         >
           <InfoMailForm />
         </Box>

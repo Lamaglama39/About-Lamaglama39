@@ -18,7 +18,8 @@ export const InfoCardList = ({ IconName, UrlLink }) => {
     >
       <Box
         margin={"0.5em"}
-        padding={"1em"}
+        padding={"0.5em"}
+        fontSize={["1em", "1.5em", "1.5em"]}
         display={"flex"}
         textAlign={"center"}
         borderRadius={"0.5em"}
