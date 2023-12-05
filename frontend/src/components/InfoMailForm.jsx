@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { Textarea } from "@chakra-ui/react";
 import { InfoMailAPI } from "./InfoMailAPI";
+import { CiMail } from "react-icons/ci";
 
 export const InfoMailForm = () => {
   const {
@@ -44,8 +45,6 @@ export const InfoMailForm = () => {
   return (
     <Box
       display={"flex"}
-      justifyContent={"center"}
-      alignItems={"center"}
       textAlign={"center"}
       marginTop={["5em"]}
       marginX={"auto"}
@@ -57,7 +56,7 @@ export const InfoMailForm = () => {
             メールアドレス
           </FormLabel>
           <Input
-            w={"100%"}
+            borderColor={"teal.500"}
             id="mail"
             placeholder="あなたのメールアドレスを入力してください。"
             {...register("mail", {
@@ -74,7 +73,7 @@ export const InfoMailForm = () => {
             件名
           </FormLabel>
           <Input
-            w={"100%"}
+            borderColor={"teal.500"}
             id="title"
             placeholder="件名を入力してください。"
             {...register("title", {
@@ -86,11 +85,12 @@ export const InfoMailForm = () => {
           </FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={errors.contents} marginBottom={"1em"}>
+        <FormControl isInvalid={errors.contents}>
           <FormLabel htmlFor="contents" fontSize={"1.5em"}>
             お問い合わせ内容
           </FormLabel>
           <Textarea
+            borderColor={"teal.500"}
             resize={"none"}
             h={"15em"}
             id="contents"
@@ -105,12 +105,16 @@ export const InfoMailForm = () => {
           </FormErrorMessage>
         </FormControl>
         <Button
-          marginTop={"2em"}
+          marginY={"1em"}
           colorScheme="teal"
+          className="selectButton"
           isLoading={isSubmitting}
           type="submit"
+          border={"none"}
+          fontSize={"1.5em"}
         >
-          送信する？
+          <CiMail style={{ marginRight: "0.5em" }} />
+          送信
         </Button>
       </form>
     </Box>
