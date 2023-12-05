@@ -28,6 +28,7 @@ export const ProfilePage = () => {
           alignItems="flex-start"
           paddingX={["0", "0", "10vw"]}
           gap={["0", "0", "5vw"]}
+          marginX={["2em", "2em", "0"]}
         >
           <InfoContents />
           <SkillBox />
