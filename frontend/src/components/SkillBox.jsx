@@ -5,7 +5,7 @@ import { SkillIconList } from "./SkillIconList";
 export const SkillBox = () => {
   return (
     <>
-      <Box width={["100%"]} marginBottom={["5vh"]}>
+      <Box w={"100%"} marginBottom={["5vh"]}>
         <Text
           textAlign={"center"}
           fontSize={["2.5em"]}
