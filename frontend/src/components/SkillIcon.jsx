@@ -20,8 +20,8 @@ export const SkillIcon = ({ title }) => {
             display="inline-flex"
             flexDirection="column"
             alignItems="center"
-            h={["3.5em", "3.5em", "4em"]}
-            w={["3.5em", "3.5em", "4em"]}
+            h={["3em", "3.5em", "4em"]}
+            w={["3em", "3.5em", "4em"]}
             _hover={{
               textDecoration: "none",
               filter: "brightness(1.5)",

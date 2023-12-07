@@ -9,7 +9,7 @@ export const VicugnaArea = () => {
           fontSize={["2em", "2.5em", "3em"]}
           fontWeight={"bold"}
           position={"absolute"}
-          top={["4em"]}
+          top={["4em", "4em", "2em"]}
           left={["50%"]}
           transform={["translate(-50%, -50%)"]}
           className={"top-title"}
