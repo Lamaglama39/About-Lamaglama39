@@ -12,22 +12,31 @@ export const TopButton = ({ buttonName, routeName }) => {
   const isCurrentPage = location.pathname === routeName; // 現在のページがこのボタンのルートと一致しているかどうかをチェック
 
   return (
-    <Text
-      fontSize={["2em"]}
-      w={"33%"}
-      className={isCurrentPage ? "TopButton" : "none"}
-      textAlign={"center"}
+    <ChakraLink
+      w={"20vw"}
+      margin={"0"}
+      padding={"0"}
+      _hover={{
+        textDecoration: "none",
+      }}
+      onClick={isCurrentPage ? null : () => navigate(routeName)} // 現在のページならonClickをnullに設定
     >
-      <ChakraLink
-        onClick={isCurrentPage ? null : () => navigate(routeName)} // 現在のページならonClickをnullに設定
+      <Text
+        margin={"0"}
+        padding={"0.3em"}
+        textAlign={"center"}
+        fontSize={"1.5em"}
         fontWeight={"bold"}
-        textDecoration="none"
-        _hover={{ textDecoration: isCurrentPage ? "none" : "underline" }}
+        _hover={{
+          filter: isCurrentPage ? "none" : "brightness(1.25)",
+          transition: isCurrentPage ? "none" : "0.3s",
+        }}
         cursor={isCurrentPage ? "default" : "pointer"}
+        className={isCurrentPage ? "TopButton" : "TopBar"}
       >
         {buttonName}
-      </ChakraLink>
-    </Text>
+      </Text>
+    </ChakraLink>
   );
 };
 
