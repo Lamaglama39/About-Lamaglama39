@@ -26,7 +26,7 @@ export const TopDrawer = ({ display }) => {
 
   return (
     <>
-      <Box h={"3em"}>
+      <Box>
         <Button
           onClick={onOpen}
           zIndex="docked"
@@ -45,7 +45,7 @@ export const TopDrawer = ({ display }) => {
       </Box>
       <Drawer placement={"top"} onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent borderBottomRadius={"3em"}>
           <DrawerHeader margin="0" padding="0">
             <DrawerCloseButton
               left={"0.5em"}
@@ -60,7 +60,14 @@ export const TopDrawer = ({ display }) => {
               }}
             />
           </DrawerHeader>
-          <DrawerBody paddingY={"0.25em"} paddingX={"5em"} className="TopBar">
+          <DrawerBody
+            className="TopBar"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            borderBottomRadius={"3em"}
+          >
             {buttonNameList.map((buttonName) => {
               return (
                 <>

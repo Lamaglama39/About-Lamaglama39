@@ -18,6 +18,8 @@ export const TopDrawerItem = ({ buttonName, routeName }) => {
       onClick={isCurrentPage ? null : () => navigate(routeName)} // 現在のページならonClickをnullに設定
     >
       <Text
+        w={"5em"}
+        borderRadius={"5em"}
         marginY={"0.25em"}
         textAlign={"center"}
         fontSize={"1.5em"}
