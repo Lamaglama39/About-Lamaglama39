@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 
 // モデルローダーコンポーネント - クライアントサイドのみでロードされる
 const ThreeDModel = () => {
@@ -25,6 +26,13 @@ const ClientOnly = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default function Model() {
+  const location = useLocation();
+  
+  // アルパカページ（ルートパスと/alpaca）では背景モデルを表示しない
+  if (location.pathname === '/' || location.pathname === '/alpaca') {
+    return null;
+  }
+  
   return (
     <div className="relative">
       <ClientOnly>

@@ -16,12 +16,14 @@ export default function NavBar() {
   return (
     <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-2 flex items-center justify-between shadow-sm">
       <div className="flex items-center gap-2">
-        <img src="/space-lama.png" alt="Lamaglama39" className="w-8 h-8 rounded-full" />
-        <Link to="/" className="text-xl font-bold text-gray-900 dark:text-white">Lamaglama39</Link>
+        <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <img src="/space-lama.png" alt="Lamaglama39" className="w-8 h-8 rounded-full" />
+          <span className="text-xl font-bold text-gray-900 dark:text-white">Lamaglama39</span>
+        </Link>
       </div>
       <ul className="flex gap-6 items-center">
         <li>
-          <Link to="/" className="text-gray-700 dark:text-gray-200 hover:text-cyan-500 dark:hover:text-cyan-400 font-semibold transition-colors">Home</Link>
+          <Link to="/profile" className="text-gray-700 dark:text-gray-200 hover:text-cyan-500 dark:hover:text-cyan-400 font-semibold transition-colors">Profile</Link>
         </li>
         <li>
           <Link to="/blog" className="text-gray-700 dark:text-gray-200 hover:text-cyan-500 dark:hover:text-cyan-400 font-semibold transition-colors">Blog</Link>

@@ -23,8 +23,8 @@ export default function Apps() {
       description: "今見ているポートフォリオです。\n無心でラマをくるくる回して遊んでみてね。",
       technologies: ["React", "TypeScript", "Cloudflare", "Tailwind CSS"],
       imageUrl: "apps/about-lamaglama39-info.png",
-      link: "https://Lamaglama39.github.io/About-Lamaglama39/",
-      github: "https://www.irasutoya.com/2013/12/blog-post_826.html"
+      link: "https://lamaglama39.dev/",
+      github: "https://github.com/Lamaglama39/About-Lamaglama39"
     },
     {
       id: 2,
