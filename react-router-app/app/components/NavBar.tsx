@@ -14,7 +14,7 @@ export default function NavBar() {
   }, [darkMode]);
 
   return (
-    <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-2 flex items-center justify-between">
+    <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-2 flex items-center justify-between shadow-sm">
       <div className="flex items-center gap-2">
         <img src="/space-lama.png" alt="Lamaglama39" className="w-8 h-8 rounded-full" />
         <Link to="/" className="text-xl font-bold text-gray-900 dark:text-white">Lamaglama39</Link>
