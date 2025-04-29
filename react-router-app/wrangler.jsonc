@@ -8,11 +8,25 @@
 	"compatibility_date": "2025-04-04",
 	"main": "./workers/app.ts",
 	"vars": {
-		"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare"
+		"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare",
+		"BLOG_FETCHER_URL": "https://blog-fetcher.workers.dev"
 	},
 	"observability": {
 		"enabled": true
-	}
+	},
+	"routes": [
+		{
+		  "pattern": "lamaglama39.dev",
+		  "custom_domain": true
+		}
+	],
+	// "services": [
+	// 	{ 
+	// 		"binding": "BLOG_FETCHER", 
+	// 		"service": "blog-fetcher"
+	// 	}
+	// ]
+
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
@@ -46,5 +60,4 @@
 	 * Service Bindings (communicate between multiple Workers)
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
 	 */
-	// "services": [{ "binding": "MY_SERVICE", "service": "my-service" }]
 }

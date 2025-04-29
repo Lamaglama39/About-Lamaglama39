@@ -10,6 +10,14 @@ export default async function handleRequest(
   routerContext: EntryContext,
   _loadContext: AppLoadContext
 ) {
+  // URLからturbo-streamリクエストか判断
+  const url = new URL(request.url);
+  // turbo-streamのリクエストを検知（Accept ヘッダーやクエリパラメータから）
+  const acceptHeader = request.headers.get("Accept") || "";
+  const isTurboStream = acceptHeader.includes("turbo-stream") || 
+                         url.searchParams.has("_data");
+  
+  // 通常のHTMLレスポンスを生成
   let shellRendered = false;
   const userAgent = request.headers.get("user-agent");
 
@@ -35,7 +43,16 @@ export default async function handleRequest(
     await body.allReady;
   }
 
-  responseHeaders.set("Content-Type", "text/html");
+  // コンテンツタイプをセット
+  // データリクエストはJSONとして返す（React Router 7がハンドリングできる形式）
+  if (url.pathname.includes("blog") && url.searchParams.has("_data")) {
+    // データリクエストはJSONとして返す
+    responseHeaders.set("Content-Type", "application/json");
+  } else {
+    // 通常のページレンダリングはHTMLとして返す
+    responseHeaders.set("Content-Type", "text/html");
+  }
+  
   return new Response(body, {
     headers: responseHeaders,
     status: responseStatusCode,

@@ -1,18 +1,35 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+
+// モデルローダーコンポーネント - クライアントサイドのみでロードされる
+const ThreeDModel = () => {
+  return (
+    <div className="fixed inset-0 -z-10 w-full h-full">
+      <iframe 
+        src="/model-viewer.html" 
+        className="w-full h-full border-0"
+        title="Lama 3D Model"
+      />
+    </div>
+  );
+};
+
+// クライアントサイドのみのコンポーネント
+const ClientOnly = ({ children }: { children: React.ReactNode }) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  return isMounted ? <>{children}</> : null;
+};
 
 export default function Model() {
   return (
-    <div className="w-full py-4 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4">
-        <div className="flex justify-center">
-          <img 
-            src="/space-lama.png" 
-            alt="Space Lama" 
-            className="h-28 md:h-36 w-auto object-contain transform-gpu transition-all duration-700 hover:scale-105" 
-          />
-        </div>
-      </div>
+    <div className="relative">
+      <ClientOnly>
+        <ThreeDModel />
+      </ClientOnly>
     </div>
   );
 }
