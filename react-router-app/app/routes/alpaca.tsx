@@ -30,7 +30,7 @@ const AlpacaModel = () => {
         
         // シーンの作成
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color('#111827');
+        scene.background = new THREE.Color('#000000');
         
         // カメラの設定
         const camera = new THREE.PerspectiveCamera(
