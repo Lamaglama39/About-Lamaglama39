@@ -101,7 +101,7 @@ const getQiitaFallbackData = (): Article[] => {
     {
       id: 1001,
       title: "Qiita デモ記事",
-      date: "2025-05-10",
+      date: "1970-01-01",
       excerpt: "Qiita デモ記事",
       tags: ["Qiita", "デモ記事"],
       url: "https://qiita.com/lamaglama39/items/sample1",
@@ -161,7 +161,7 @@ const getZennFallbackData = (): Article[] => {
     {
       id: 1,
       title: "Zenn デモ記事",
-      date: "2025-05-05",
+      date: "1970-01-01",
       excerpt: "Zenn デモ記事",
       tags: [],
       url: "https://zenn.dev/lamaglama39/articles/nextjs-typescript-blog",
