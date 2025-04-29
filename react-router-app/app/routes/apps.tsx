@@ -15,31 +15,34 @@ export default function Apps() {
     setLoaded(true);
   }, []);
 
-  // アプリケーションのサンプルデータ
+  // 既存のポートフォリオから移行した実際のアプリケーションデータ
   const apps = [
     {
       id: 1,
-      title: "ポートフォリオサイト",
-      description: "React Router v7とTailwind CSSを使用した個人ポートフォリオサイト",
+      title: "About Lamaglama39",
+      description: "今見ているポートフォリオです。\n無心でラマをくるくる回して遊んでみてね。",
       technologies: ["React", "TypeScript", "Cloudflare", "Tailwind CSS"],
-      imageUrl: "/app-portfolio.png",
-      link: "https://github.com/Lamaglama39/portfolio-site"
+      imageUrl: "apps/about-lamaglama39-info.png",
+      link: "https://Lamaglama39.github.io/About-Lamaglama39/",
+      github: "https://www.irasutoya.com/2013/12/blog-post_826.html"
     },
     {
       id: 2,
-      title: "GitHub Actionsサンプル",
-      description: "さまざまなGitHub Actionsのワークフロー集",
-      technologies: ["GitHub Actions", "CI/CD", "Docker"],
-      imageUrl: "/app-github.png",
-      link: "https://github.com/Lamaglama39/github-actions-for-ci"
+      title: "無限ぷちぷち",
+      description: "懐かしの無限ぷちぷち...。\nあの頃には出来なかった真の無限ぷちぷちをご堪能ください。",
+      technologies: ["JavaScript", "HTML5", "CSS3", "AWS CloudFront"],
+      imageUrl: "apps/infinite-puchi-info.png",
+      link: "https://d3a5y9l67jnuw.cloudfront.net/",
+      github: "https://github.com/Lamaglama39/bubblewrap-paradise"
     },
     {
       id: 3,
-      title: "Terraform AWS Modules",
-      description: "AWS環境を構築するためのTerraformモジュール集",
-      technologies: ["Terraform", "AWS", "IaC"],
-      imageUrl: "/app-terraform.png",
-      link: "https://github.com/Lamaglama39/terraform-aws-modules"
+      title: "タイピング・パラダイス",
+      description: "四方から文字が襲い掛かるカオスなタイピングゲームです。\n一味違ったタイピング体験ができます。",
+      technologies: ["React", "JavaScript", "AWS CloudFront", "Game"],
+      imageUrl: "apps/typing-paradise-info.png",
+      link: "https://d3n4v8721djrpd.cloudfront.net/",
+      github: "https://github.com/Lamaglama39/typing-paradise"
     }
   ];
 
@@ -61,7 +64,7 @@ export default function Apps() {
               
               <div className="p-5">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{app.title}</h2>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">{app.description}</p>
+                <p className="text-gray-600 dark:text-gray-300 mb-4 whitespace-pre-line">{app.description}</p>
                 
                 <div className="mb-4 flex flex-wrap gap-2">
                   {app.technologies.map(tech => (
@@ -71,14 +74,25 @@ export default function Apps() {
                   ))}
                 </div>
                 
-                <a 
-                  href={app.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 text-sm font-medium text-white bg-cyan-500 hover:bg-cyan-600 dark:bg-cyan-600 dark:hover:bg-cyan-700 rounded transition-colors"
-                >
-                  詳細を見る
-                </a>
+                <div className="flex space-x-2">
+                  <a 
+                    href={app.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-block px-4 py-2 text-sm font-medium text-white bg-cyan-500 hover:bg-cyan-600 dark:bg-cyan-600 dark:hover:bg-cyan-700 rounded transition-colors"
+                  >
+                    アプリを見る
+                  </a>
+                  
+                  <a 
+                    href={app.github} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-block px-4 py-2 text-sm font-medium text-white bg-gray-500 hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-700 rounded transition-colors"
+                  >
+                    GitHub
+                  </a>
+                </div>
               </div>
             </div>
           ))}
