@@ -1,6 +1,7 @@
 import type { Route } from "./+types/blog";
 import { useEffect, useState } from "react";
 import { getAllArticles, type Article } from "../utils/getBlogArticles";
+import { getCachedBlogData, setBlogCache, updateBlogCache } from "../utils/blogCache";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -19,10 +20,25 @@ export default function Blog() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // 1ページあたり10件の記事を表示
   
-  // コンポーネントマウント時に記事データを取得
+  // コンポーネントマウント時に記事データを取得（キャッシュがあればそれを使用）
   useEffect(() => {
     const fetchArticles = async () => {
       try {
+        // まずキャッシュをチェック
+        const cachedData = getCachedBlogData();
+        
+        if (cachedData) {
+          // キャッシュがあれば使用
+          console.log('キャッシュからブログデータを読み込みました');
+          setArticles(cachedData.articles);
+          setCurrentPage(cachedData.currentPage);
+          setError(cachedData.error);
+          setLoaded(true);
+          setLoading(false);
+          return;
+        }
+        
+        // キャッシュがなければ新たにデータを取得
         setLoading(true);
         
         // 複数ソースから記事を取得して統合
@@ -30,12 +46,29 @@ export default function Blog() {
         
         setArticles(allArticles);
         setError(null);
+        
+        // キャッシュにデータを保存
+        setBlogCache({
+          articles: allArticles,
+          currentPage: 1,
+          error: null
+        });
+        
         setLoaded(true);
         setLoading(false);
       } catch (err) {
         console.error('記事の取得に失敗しました:', err);
-        setError('記事の取得中にエラーが発生しました。');
+        const errorMessage = '記事の取得中にエラーが発生しました。';
+        setError(errorMessage);
         setArticles([]);
+        
+        // エラー情報もキャッシュ
+        setBlogCache({
+          articles: [],
+          currentPage: 1,
+          error: errorMessage
+        });
+        
         setLoaded(true);
         setLoading(false);
       }
@@ -52,6 +85,9 @@ export default function Blog() {
         const page = parseInt(hash.substring(6), 10);
         if (!isNaN(page) && page > 0 && page <= Math.ceil(articles.length / itemsPerPage)) {
           setCurrentPage(page);
+          
+          // ページ情報をキャッシュに保存
+          updateBlogCache({ currentPage: page });
         }
       }
     };
