@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import type { Route } from './+types/alpaca';
+import LIGHT_PRESETS, { type LightPreset, type LightPresets } from '../data/lightPresets';
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -15,6 +16,55 @@ const AlpacaModel = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isInteracting, setIsInteracting] = useState<boolean>(false);
   const interactionTimeoutRef = useRef<number | null>(null);
+  
+  // ライト設定のステート
+  const [preset, setPreset] = useState<string>("DEFAULT");
+  const [lightIntensity, setLightIntensity] = useState<number>(1.0);
+  const [showControls, setShowControls] = useState<boolean>(false);
+  
+  // Three.js関連の参照保持用
+  const sceneRef = useRef<any>(null);
+  const lightsRef = useRef<{
+    ambient?: any;
+    directional?: any;
+    spots: any[];
+  }>({
+    spots: []
+  });
+  
+  const applyLightPreset = (presetKey: string, intensity: number = 1.0) => {
+    if (!sceneRef.current) return;
+    
+    const presetData = LIGHT_PRESETS[presetKey as keyof typeof LIGHT_PRESETS];
+    if (!presetData) return;
+    
+    // 背景色の変更
+    sceneRef.current.background.set(presetData.background);
+    
+    // 環境光の調整
+    if (lightsRef.current.ambient) {
+      lightsRef.current.ambient.color.set(presetData.ambientLight.color);
+      lightsRef.current.ambient.intensity = presetData.ambientLight.intensity * intensity;
+    }
+    
+    // 指向性ライトの調整
+    if (lightsRef.current.directional) {
+      lightsRef.current.directional.color.set(presetData.directionalLight.color);
+      lightsRef.current.directional.intensity = presetData.directionalLight.intensity * intensity;
+    }
+    
+    // スポットライトの調整
+    lightsRef.current.spots.forEach((spot, index) => {
+      if (index < presetData.spotLights.length) {
+        const spotData = presetData.spotLights[index];
+        spot.color.set(spotData.color);
+        spot.intensity = spotData.intensity * intensity;
+        spot.angle = spotData.angle;
+        spot.penumbra = spotData.penumbra;
+        spot.position.set(...spotData.position);
+      }
+    });
+  };
   
   useEffect(() => {
     // ThreeJSを動的にロード
@@ -33,6 +83,7 @@ const AlpacaModel = () => {
         // シーンの作成
         const scene = new THREE.Scene();
         scene.background = new THREE.Color('#000000');
+        sceneRef.current = scene;
         
         // 床を表示するかどうか
         const showFloor = false;
@@ -61,11 +112,12 @@ const AlpacaModel = () => {
         containerRef.current.appendChild(renderer.domElement);
         
         // ライトを追加
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        const ambientLight = new THREE.AmbientLight('#ffffff', 0.7);
         scene.add(ambientLight);
+        lightsRef.current.ambient = ambientLight;
         
         // メインの指向性ライト - 少し上から光を当てる
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        const directionalLight = new THREE.DirectionalLight('#ffffff', 0.8);
         directionalLight.position.set(0, 5, 1); // より上からの角度に
         directionalLight.castShadow = true;
         directionalLight.shadow.mapSize.width = 1024;
@@ -78,9 +130,10 @@ const AlpacaModel = () => {
         directionalLight.shadow.camera.top = 5;
         directionalLight.shadow.camera.bottom = -5;
         scene.add(directionalLight);
+        lightsRef.current.directional = directionalLight;
         
         // スポットライト1 - 青っぽい - 位置と強度を調整
-        const spotLight1 = new THREE.SpotLight(0x4477ff, 500.0);
+        const spotLight1 = new THREE.SpotLight('#4477ff', 500.0);
         spotLight1.position.set(-3, 5, 2);
         spotLight1.angle = Math.PI / 8; // より集中した光に
         spotLight1.penumbra = 0.5; // よりソフトな光の減衰
@@ -92,7 +145,7 @@ const AlpacaModel = () => {
         scene.add(spotLight1);
         
         // スポットライト2 - ピンクっぽい - 位置と強度を調整
-        const spotLight2 = new THREE.SpotLight(0xff77aa, 500.0);
+        const spotLight2 = new THREE.SpotLight('#ff77aa', 500.0);
         spotLight2.position.set(3, 5, 2);
         spotLight2.angle = Math.PI / 8; // より集中した光に
         spotLight2.penumbra = 0.5; // よりソフトな光の減衰
@@ -103,11 +156,14 @@ const AlpacaModel = () => {
         scene.add(spotLight2.target);
         scene.add(spotLight2);
         
+        // スポットライトを参照に保持
+        lightsRef.current.spots = [spotLight1, spotLight2];
+        
         // 地面（ステージ）の追加 - 任意で表示
         if (showFloor) {
           const stageGeometry = new THREE.CircleGeometry(5, 32);
           const stageMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0x111111, // より暗く
+            color: '#111111', // より暗く
             metalness: 0.3, // やや光沢を抑える
             roughness: 0.4, // 滑らかさを増す
             transparent: true,
@@ -159,7 +215,7 @@ const AlpacaModel = () => {
         
         // ローディングを表示するためのオブジェクト
         const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({ color: 0x666666, wireframe: true });
+        const material = new THREE.MeshBasicMaterial({ color: '#666666', wireframe: true });
         const cube = new THREE.Mesh(geometry, material);
         scene.add(cube);
         
@@ -225,6 +281,10 @@ const AlpacaModel = () => {
             model.position.z = -center.z * scale;
             
             scene.add(model);
+            
+            // 初期プリセットを適用
+            applyLightPreset(preset, lightIntensity);
+            
             setLoading(false);
           },
           (progress) => {
@@ -275,6 +335,16 @@ const AlpacaModel = () => {
     loadThreeJS();
   }, []);
   
+  // プリセットが変わった時に適用
+  useEffect(() => {
+    applyLightPreset(preset, lightIntensity);
+  }, [preset, lightIntensity]);
+  
+  // コントロールの表示/非表示を切り替え
+  const toggleControls = () => {
+    setShowControls(!showControls);
+  };
+  
   return (
     <>
       <div ref={containerRef} className="w-full h-full"></div>
@@ -309,6 +379,78 @@ const AlpacaModel = () => {
           <p className="text-sm opacity-80 drop-shadow-md">
             マウスドラッグで回転・スクロールで拡大縮小
           </p>
+        </div>
+      )}
+      
+      {/* ライティングコントロールパネル */}
+      {!loading && !error && (
+        <div className="absolute bottom-25 left-1/2 transform -translate-x-1/2 max-w-md w-full px-4">
+          <div 
+            className="relative bg-gray-900 bg-opacity-70 backdrop-blur-md rounded-xl px-4 py-2 text-white shadow-xl border border-gray-700 transition-all duration-300 flex flex-col"
+            style={{ maxHeight: showControls ? '400px' : '50px', overflow: 'hidden' }}
+          >
+            <div className="flex justify-between items-center">
+              <h3 className="font-bold text-xl">ライティング設定</h3>
+              <button
+                onClick={toggleControls}
+                className="text-lg hover:bg-cyan-600 p-1 rounded-lg transition-colors w-8 h-8 flex items-center justify-center my-auto"
+                aria-label={showControls ? "設定を閉じる" : "設定を開く"}
+                title={showControls ? "設定を閉じる" : "設定を開く"}
+              >
+                {showControls ? '▼' : '▲'}
+              </button>
+            </div>
+            
+            <div className={`mt-4 transition-opacity duration-200 ${showControls ? 'opacity-100' : 'opacity-0'}`}>
+              {/* プリセット選択 */}
+              <div className="mb-5">
+                <div className="grid grid-cols-4 gap-2">
+                  {Object.entries(LIGHT_PRESETS).map(([key, value]) => (
+                    <button
+                      key={key}
+                      onClick={() => setPreset(key)}
+                      className={`p-2 rounded-lg flex flex-col items-center justify-center transition-colors ${
+                        preset === key 
+                          ? 'bg-cyan-700 text-white' 
+                          : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
+                      }`}
+                    >
+                      <span className="text-2xl mb-1">{value.emoji}</span>
+                      <span className="text-xs whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">
+                        {value.name}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              {/* 現在のプリセット情報 */}
+              <div className="mb-3 text-sm">
+                <p>🎬 現在のスタイル: {LIGHT_PRESETS[preset as keyof typeof LIGHT_PRESETS].name}</p>
+              </div>
+              
+              {/* 強度スライダー */}
+              <div className="px-1">
+                <label className="flex justify-between items-center mb-1">
+                  <span>ライト強度:</span>
+                  <span className="text-sm">{Math.round(lightIntensity * 100)}%</span>
+                </label>
+                <input
+                  type="range"
+                  min="0.1"
+                  max="2"
+                  step="0.1"
+                  value={lightIntensity}
+                  onChange={(e) => setLightIntensity(parseFloat(e.target.value))}
+                  className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                />
+                <div className="flex justify-between text-xs px-2">
+                  <span>弱</span>
+                  <span>強</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </>
