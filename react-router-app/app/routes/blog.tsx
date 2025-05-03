@@ -207,22 +207,29 @@ export default function Blog() {
                 <div className="space-y-8">
                   {currentArticles.map(article => (
                     <article key={article.id} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                      <div className="flex justify-between items-start mb-4">
+                      <div className="flex justify-between items-start mb-2">
                         <h2 className="text-xl font-bold text-gray-900 dark:text-white">{article.title}</h2>
-                        <div className="flex items-center space-x-2">
-                          {article.source && (
-                            <span className={`px-2 py-1 text-xs font-bold rounded ${
-                              article.source === 'Zenn' 
-                                ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100'
-                              : article.source === 'DevelopersIO'
-                                ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100'
-                              : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100'
-                            }`}>
-                              {article.source}
-                            </span>
-                          )}
-                          <time className="text-sm text-gray-500 dark:text-gray-400">{article.date}</time>
-                        </div>
+                      </div>
+                      
+                      {/* 投稿元サイトと投稿日を横に並べる */}
+                      <div className="mb-3 flex items-center space-x-3">
+                        {article.source && (
+                          <span className={`px-2 py-1 text-xs font-bold rounded ${
+                            article.source === 'Zenn' 
+                              ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100'
+                            : article.source === 'DevelopersIO'
+                              ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100'
+                            : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100'
+                          }`}>
+                            {article.source}
+                          </span>
+                        )}
+                        <time className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          {article.date}
+                        </time>
                       </div>
                       
                       <p className="text-gray-600 dark:text-gray-300 mb-4">{article.excerpt}</p>
