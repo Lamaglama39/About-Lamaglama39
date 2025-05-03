@@ -244,8 +244,6 @@ export default function Blog() {
                         </time>
                       </div>
                       
-                      <p className="text-gray-600 dark:text-gray-300 mb-4">{article.excerpt}</p>
-                      
                       <div className="flex flex-wrap gap-2 mb-4">
                         {article.tags.map(tag => (
                           <span key={tag} className="px-2 py-1 text-xs font-medium bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-100 rounded-full">
