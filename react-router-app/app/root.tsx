@@ -48,7 +48,7 @@ export default function App() {
       <header className="fixed top-0 left-0 right-0 z-50">
         <NavBar />
       </header>
-      <div className="pt-12">
+      <div className="pt-16">
         <div className="pt-4">
           <Outlet />
         </div>
