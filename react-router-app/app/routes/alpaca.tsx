@@ -369,15 +369,12 @@ const AlpacaModel = () => {
       
       {!loading && !error && (
         <div 
-          className={`absolute top-20 left-0 right-0 text-center text-white transition-opacity duration-1000 ${
+          className={`absolute top-10 left-0 right-0 text-center text-white transition-opacity duration-1000 ${
             isInteracting ? 'opacity-0' : 'opacity-100'
           }`}
         >
-          <p className="text-2xl font-bold mb-2 drop-shadow-lg">
-            まわせい！アルパカをまわせい！！
-          </p>
-          <p className="text-sm opacity-80 drop-shadow-md">
-            マウスドラッグで回転・スクロールで拡大縮小
+          <p className="text-2xl font-bold mb-8 drop-shadow-lg font-serif">
+            まわせいぃ！<br></br>アルパカをまわせいぃ！！
           </p>
         </div>
       )}
