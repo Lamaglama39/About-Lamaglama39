@@ -13,6 +13,8 @@ const AlpacaModel = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isInteracting, setIsInteracting] = useState<boolean>(false);
+  const interactionTimeoutRef = useRef<number | null>(null);
   
   useEffect(() => {
     // ThreeJSを動的にロード
@@ -32,6 +34,9 @@ const AlpacaModel = () => {
         const scene = new THREE.Scene();
         scene.background = new THREE.Color('#000000');
         
+        // 床を表示するかどうか
+        const showFloor = false;
+        
         // カメラの設定
         const camera = new THREE.PerspectiveCamera(
           50, 
@@ -48,18 +53,72 @@ const AlpacaModel = () => {
         });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         
         // DOMに追加
         containerRef.current.innerHTML = '';
         containerRef.current.appendChild(renderer.domElement);
         
         // ライトを追加
-        const ambientLight = new THREE.AmbientLight(0xffffff, 2);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
         scene.add(ambientLight);
         
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-        directionalLight.position.set(1, 1, 1);
+        // メインの指向性ライト - 少し上から光を当てる
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(0, 5, 1); // より上からの角度に
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 1024;
+        directionalLight.shadow.mapSize.height = 1024;
+        // シャドウカメラのパラメータ調整
+        directionalLight.shadow.camera.near = 0.5;
+        directionalLight.shadow.camera.far = 15;
+        directionalLight.shadow.camera.left = -5;
+        directionalLight.shadow.camera.right = 5;
+        directionalLight.shadow.camera.top = 5;
+        directionalLight.shadow.camera.bottom = -5;
         scene.add(directionalLight);
+        
+        // スポットライト1 - 青っぽい - 位置と強度を調整
+        const spotLight1 = new THREE.SpotLight(0x4477ff, 500.0);
+        spotLight1.position.set(-3, 5, 2);
+        spotLight1.angle = Math.PI / 8; // より集中した光に
+        spotLight1.penumbra = 0.5; // よりソフトな光の減衰
+        spotLight1.castShadow = true;
+        spotLight1.shadow.mapSize.width = 1024;
+        spotLight1.shadow.mapSize.height = 1024;
+        // ターゲットを追加
+        scene.add(spotLight1.target);
+        scene.add(spotLight1);
+        
+        // スポットライト2 - ピンクっぽい - 位置と強度を調整
+        const spotLight2 = new THREE.SpotLight(0xff77aa, 500.0);
+        spotLight2.position.set(3, 5, 2);
+        spotLight2.angle = Math.PI / 8; // より集中した光に
+        spotLight2.penumbra = 0.5; // よりソフトな光の減衰
+        spotLight2.castShadow = true;
+        spotLight2.shadow.mapSize.width = 1024;
+        spotLight2.shadow.mapSize.height = 1024;
+        // ターゲットを追加
+        scene.add(spotLight2.target);
+        scene.add(spotLight2);
+        
+        // 地面（ステージ）の追加 - 任意で表示
+        if (showFloor) {
+          const stageGeometry = new THREE.CircleGeometry(5, 32);
+          const stageMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x111111, // より暗く
+            metalness: 0.3, // やや光沢を抑える
+            roughness: 0.4, // 滑らかさを増す
+            transparent: true,
+            opacity: 0.3 // さらに透明に
+          });
+          const stage = new THREE.Mesh(stageGeometry, stageMaterial);
+          stage.rotation.x = -Math.PI / 2; // 水平に回転
+          stage.position.y = -1.8; // さらに下に配置
+          stage.receiveShadow = true;
+          scene.add(stage);
+        }
         
         // オービットコントロールの追加
         const controls = new OrbitControls(camera, renderer.domElement);
@@ -69,6 +128,25 @@ const AlpacaModel = () => {
         controls.maxDistance = 10;
         controls.autoRotate = true;
         controls.autoRotateSpeed = 1;
+        
+        // ユーザーの操作を検知する
+        controls.addEventListener('start', () => {
+          setIsInteracting(true);
+          
+          // 前回のタイマーがあればクリア
+          if (interactionTimeoutRef.current !== null) {
+            window.clearTimeout(interactionTimeoutRef.current);
+            interactionTimeoutRef.current = null;
+          }
+        });
+        
+        controls.addEventListener('end', () => {
+          // 3秒後に操作終了とみなす
+          interactionTimeoutRef.current = window.setTimeout(() => {
+            setIsInteracting(false);
+            interactionTimeoutRef.current = null;
+          }, 3000);
+        });
         
         // モデルをロード
         const loader = new GLTFLoader();
@@ -92,6 +170,18 @@ const AlpacaModel = () => {
           cube.rotation.x += 0.01;
           cube.rotation.y += 0.01;
           
+          // スポットライトをゆっくり回転 - 回転範囲とスピードを調整
+          const time = Date.now() * 0.0005; // ゆっくりとした動き
+          spotLight1.position.x = Math.sin(time * 0.7) * 4;
+          spotLight1.position.z = Math.cos(time * 0.5) * 4;
+          
+          spotLight2.position.x = Math.sin(time * 0.7 + Math.PI) * 4;
+          spotLight2.position.z = Math.cos(time * 0.5 + Math.PI) * 4;
+          
+          // ライトがモデルを常に照らすようにtargetを設定
+          spotLight1.target.position.set(0, 0, 0);
+          spotLight2.target.position.set(0, 0, 0);
+          
           controls.update();
           renderer.render(scene, camera);
         };
@@ -109,6 +199,15 @@ const AlpacaModel = () => {
             
             const model = gltf.scene;
             
+            // シャドウの設定
+            model.traverse((node) => {
+              // Mesh型かどうかをチェック
+              if (node instanceof THREE.Mesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+              }
+            });
+            
             // モデルのサイズ調整
             const box = new THREE.Box3().setFromObject(model);
             const size = box.getSize(new THREE.Vector3());
@@ -122,7 +221,7 @@ const AlpacaModel = () => {
             model.scale.multiplyScalar(scale);
             
             model.position.x = -center.x * scale;
-            model.position.y = -center.y * scale;
+            model.position.y = -center.y * scale + 0.5; // アルパカをさらに上に持ち上げる
             model.position.z = -center.z * scale;
             
             scene.add(model);
@@ -155,6 +254,11 @@ const AlpacaModel = () => {
           window.removeEventListener('resize', handleResize);
           if (containerRef.current) {
             containerRef.current.innerHTML = '';
+          }
+          
+          if (interactionTimeoutRef.current !== null) {
+            window.clearTimeout(interactionTimeoutRef.current);
+            interactionTimeoutRef.current = null;
           }
           
           // メモリリーク防止のためのリソース解放
@@ -192,6 +296,21 @@ const AlpacaModel = () => {
           </div>
         </div>
       )}
+      
+      {!loading && !error && (
+        <div 
+          className={`absolute top-20 left-0 right-0 text-center text-white transition-opacity duration-1000 ${
+            isInteracting ? 'opacity-0' : 'opacity-100'
+          }`}
+        >
+          <p className="text-2xl font-bold mb-2 drop-shadow-lg">
+            まわせい！アルパカをまわせい！！
+          </p>
+          <p className="text-sm opacity-80 drop-shadow-md">
+            マウスドラッグで回転・スクロールで拡大縮小
+          </p>
+        </div>
+      )}
     </>
   );
 };
@@ -221,16 +340,6 @@ export default function Alpaca() {
         <ClientOnly>
           <AlpacaModel />
         </ClientOnly>
-        
-        {/* オーバーレイテキスト */}
-        <div className="absolute top-20 left-0 right-0 text-center text-white">
-          <p className="text-2xl font-bold mb-2 drop-shadow-lg">
-            まわせい！アルパカをまわせい！！
-          </p>
-          <p className="text-sm opacity-80 drop-shadow-md">
-            マウスドラッグで回転・スクロールで拡大縮小
-          </p>
-        </div>
       </div>
     </main>
   );
