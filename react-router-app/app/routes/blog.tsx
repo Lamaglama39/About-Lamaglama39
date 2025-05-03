@@ -115,24 +115,30 @@ export default function Blog() {
     return (
       <div className="flex justify-center items-center space-x-2 my-8">
         {/* 先頭ページへ */}
-        {currentPage > 1 && (
-          <button 
-            onClick={() => goToPage(1)}
-            className="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-          >
-            &laquo;
-          </button>
-        )}
+        <button 
+          onClick={() => goToPage(1)}
+          className={`px-3 py-1 rounded transition-colors ${
+            currentPage === 1
+              ? 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500 cursor-not-allowed'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
+          }`}
+          disabled={currentPage === 1}
+        >
+          &laquo;
+        </button>
         
         {/* 前のページへ */}
-        {currentPage > 1 && (
-          <button 
-            onClick={() => goToPage(currentPage - 1)}
-            className="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-          >
-            &lsaquo;
-          </button>
-        )}
+        <button 
+          onClick={() => goToPage(currentPage - 1)}
+          className={`px-3 py-1 rounded transition-colors ${
+            currentPage === 1
+              ? 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500 cursor-not-allowed'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
+          }`}
+          disabled={currentPage === 1}
+        >
+          &lsaquo;
+        </button>
         
         {/* ページ番号 */}
         {pageNumbers.map(number => (
@@ -150,24 +156,30 @@ export default function Blog() {
         ))}
         
         {/* 次のページへ */}
-        {currentPage < totalPages && (
-          <button 
-            onClick={() => goToPage(currentPage + 1)}
-            className="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-          >
-            &rsaquo;
-          </button>
-        )}
+        <button 
+          onClick={() => goToPage(currentPage + 1)}
+          className={`px-3 py-1 rounded transition-colors ${
+            currentPage === totalPages
+              ? 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500 cursor-not-allowed'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
+          }`}
+          disabled={currentPage === totalPages}
+        >
+          &rsaquo;
+        </button>
         
         {/* 最後のページへ */}
-        {currentPage < totalPages && (
-          <button 
-            onClick={() => goToPage(totalPages)}
-            className="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-          >
-            &raquo;
-          </button>
-        )}
+        <button 
+          onClick={() => goToPage(totalPages)}
+          className={`px-3 py-1 rounded transition-colors ${
+            currentPage === totalPages
+              ? 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500 cursor-not-allowed'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
+          }`}
+          disabled={currentPage === totalPages}
+        >
+          &raquo;
+        </button>
       </div>
     );
   };
