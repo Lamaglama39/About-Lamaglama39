@@ -86,20 +86,20 @@ export default function Profile() {
 
         {/* プロフィール */}
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Lamaglama39</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">Lamaglama39</h1>
           <div className="space-y-4">
             <div>
-              <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">誕生日:1998/07/29</h2>
-              <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">好きなもの:🦀🦐🦙🪴</h2>
-              <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">生息地:日本,東京都</h2>
-              <p>観葉植物を愛するインフラエンジニアです。</p>
-              <p>最近はチランジアと触れ合っています。</p>
+              <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 text-center">誕生日:1998/07/29</h2>
+              <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 text-center">好きなもの:🦀🦐🦙🪴</h2>
+              <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 text-center">生息地:日本,東京都</h2>
+              <p className="text-center">観葉植物を愛するインフラエンジニアです。</p>
+              <p className="text-center">最近はチランジアと触れ合っています。</p>
             </div>
             
             {/* キャリア */}
-            <div>
-              <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">キャリア:</h2>
-              <div className="pl-1">
+            <div className="flex flex-col items-center">
+              <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3 text-center">キャリア:</h2>
+              <div className="w-fit">
                 {careerItems.map((item, index) => (
                   <CareerItem
                     key={index}
