@@ -1,0 +1,23 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "about-lamaglama39",
+	"compatibility_date": "2025-04-04",
+	"main": "./workers/app.ts",
+	// "vars": {
+		// "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare",
+		// "BLOG_FETCHER_URL": "https://blog-fetcher.workers.dev"
+	// },
+	"observability": {
+		"enabled": true
+	},
+	"routes": [
+		{
+		  "pattern": "about.lamaglama39.dev",
+		  "custom_domain": true
+		}
+	],
+}
