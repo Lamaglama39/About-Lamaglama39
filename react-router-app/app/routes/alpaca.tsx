@@ -10,7 +10,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 // アルパカの3Dモデルビューワーコンポーネント
-const AlpacaModel = () => {
+const AlpacaModel = ({ initialIsMobile }: { initialIsMobile: boolean }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -22,6 +22,9 @@ const AlpacaModel = () => {
   const [lightIntensity, setLightIntensity] = useState<number>(1.0);
   const [showControls, setShowControls] = useState<boolean>(false);
   
+  // デバイスタイプのステート
+  const [isMobile, setIsMobile] = useState<boolean>(initialIsMobile);
+  
   // Three.js関連の参照保持用
   const sceneRef = useRef<any>(null);
   const lightsRef = useRef<{
@@ -31,6 +34,11 @@ const AlpacaModel = () => {
   }>({
     spots: []
   });
+  
+  // 現在ロード中のモデルパスを保持
+  const currentModelPathRef = useRef<string>("");
+  // 現在ロードされているモデルの参照
+  const currentModelRef = useRef<any>(null);
   
   const applyLightPreset = (presetKey: string, intensity: number = 1.0) => {
     if (!sceneRef.current) return;
@@ -77,6 +85,7 @@ const AlpacaModel = () => {
         const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls.js');
         const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js');
         const { MeshoptDecoder } = await import('three/examples/jsm/libs/meshopt_decoder.module.js');
+        const { DRACOLoader } = await import('three/examples/jsm/loaders/DRACOLoader.js');
         
         if (!containerRef.current) return;
         
@@ -206,12 +215,22 @@ const AlpacaModel = () => {
         
         // モデルをロード
         const loader = new GLTFLoader();
+        // DRACOLoaderを設定
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath('/draco/');
+        loader.setDRACOLoader(dracoLoader);
         // Meshoptデコーダーを設定
         loader.setMeshoptDecoder(MeshoptDecoder);
         
-        const modelPath = '/model/alpaca-mini10.glb';
+        // デバイスタイプに基づいてモデルのパスを決定
+        const modelPath = isMobile 
+            ? '/model/alpaca-mobile.glb' 
+            : '/model/alpaca-desktop.glb';
         
-        console.log('モデルの読み込みを開始します:', modelPath);
+        // 現在のモデルパスを更新
+        currentModelPathRef.current = modelPath;
+        
+        console.log(`モデルの読み込みを開始します (${isMobile ? 'モバイル' : 'デスクトップ'}):`, modelPath);
         
         // ローディングを表示するためのオブジェクト
         const geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -254,6 +273,9 @@ const AlpacaModel = () => {
             scene.remove(cube);
             
             const model = gltf.scene;
+            
+            // モデルの参照を更新
+            currentModelRef.current = model;
             
             // シャドウの設定
             model.traverse((node) => {
@@ -302,9 +324,97 @@ const AlpacaModel = () => {
         const handleResize = () => {
           if (!containerRef.current) return;
           
+          // カメラとレンダラーを更新
           camera.aspect = window.innerWidth / window.innerHeight;
           camera.updateProjectionMatrix();
           renderer.setSize(window.innerWidth, window.innerHeight);
+          
+          // 端末タイプのチェック
+          const newIsMobile = window.innerWidth <= 768;
+          
+          // 端末タイプが変わった場合にモデルを再ロード
+          if (newIsMobile !== isMobile) {
+            setIsMobile(newIsMobile);
+            
+            // 新しいモデルのパスを決定
+            const newModelPath = newIsMobile 
+              ? '/model/alpaca-mobile.glb' 
+              : '/model/alpaca-desktop.glb';
+            
+            // 既に同じモデルをロード中または完了している場合は何もしない
+            if (newModelPath === currentModelPathRef.current) {
+              console.log('既に同じモデルがロード済みです:', newModelPath);
+              return;
+            }
+            
+            console.log(`デバイスタイプが変更されました (${newIsMobile ? 'モバイル' : 'デスクトップ'})。新しいモデルをロード:`, newModelPath);
+            
+            // 現在のモデルパスを更新
+            currentModelPathRef.current = newModelPath;
+            
+            // 古いモデルを削除（キューブは除く）
+            if (currentModelRef.current) {
+              scene.remove(currentModelRef.current);
+              currentModelRef.current = null;
+            }
+            
+            // ローディング状態に設定
+            setLoading(true);
+            
+            // 新しいモデルをロード
+            loader.load(
+              newModelPath,
+              (gltf) => {
+                console.log('モデルの再ロード成功:', newModelPath);
+                
+                // 新しいモデル
+                const model = gltf.scene;
+                
+                // モデルの参照を更新
+                currentModelRef.current = model;
+                
+                // シャドウの設定
+                model.traverse((node) => {
+                  if (node instanceof THREE.Mesh) {
+                    node.castShadow = true;
+                    node.receiveShadow = true;
+                  }
+                });
+                
+                // モデルのサイズ調整
+                const box = new THREE.Box3().setFromObject(model);
+                const size = box.getSize(new THREE.Vector3());
+                const center = box.getCenter(new THREE.Vector3());
+                
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const scale = 2 / maxDim;
+                
+                model.scale.multiplyScalar(scale);
+                
+                model.position.x = -center.x * scale;
+                model.position.y = -center.y * scale + 0.5;
+                model.position.z = -center.z * scale;
+                
+                // シーンに追加
+                scene.add(model);
+                
+                // 初期プリセットを適用
+                applyLightPreset(preset, lightIntensity);
+                
+                // ローディング完了
+                setLoading(false);
+              },
+              (progress) => {
+                const percent = (progress.loaded / progress.total) * 100;
+                console.log(`モデル再ロード進捗 (${newIsMobile ? 'モバイル' : 'デスクトップ'}):`, percent.toFixed(2) + '%');
+              },
+              (error) => {
+                console.error('リサイズ後のモデルの再ロードエラー:', error);
+                setError(`モデルの再ロードに失敗しました。${error instanceof Error ? error.message : '不明なエラー'}`);
+                setLoading(false);
+              }
+            );
+          }
         };
         
         window.addEventListener('resize', handleResize);
@@ -455,18 +565,29 @@ const AlpacaModel = () => {
 };
 
 // クライアントサイドのみのコンポーネント
-const ClientOnly = ({ children }: { children: React.ReactNode }) => {
+const ClientOnly = ({ children, onMount }: { children: React.ReactNode, onMount?: () => void }) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+    if (onMount) {
+      onMount();
+    }
+  }, [onMount]);
 
   return isMounted ? <>{children}</> : null;
 };
 
 export default function Alpaca() {
   const [loaded, setLoaded] = useState(false);
+  
+  // 初期デバイスタイプを判定してセット
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // クライアント側での初期化
+  const handleClientMount = () => {
+    setIsMobile(window.innerWidth <= 768);
+  };
   
   useEffect(() => {
     setLoaded(true);
@@ -476,8 +597,8 @@ export default function Alpaca() {
     <main className={`min-h-screen transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
       <div className="relative h-screen w-full overflow-hidden">
         {/* 3Dモデル */}
-        <ClientOnly>
-          <AlpacaModel />
+        <ClientOnly onMount={handleClientMount}>
+          <AlpacaModel initialIsMobile={isMobile} />
         </ClientOnly>
       </div>
     </main>
