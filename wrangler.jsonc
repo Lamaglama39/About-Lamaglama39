@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "react-router-app",
+	"name": "about-lamaglama39",
 	"compatibility_date": "2025-04-04",
 	"main": "./workers/app.ts",
 	// "vars": {
@@ -16,7 +16,7 @@
 	},
 	"routes": [
 		{
-		  "pattern": "lamaglama39.dev",
+		  "pattern": "about.lamaglama39.dev",
 		  "custom_domain": true
 		}
 	],
