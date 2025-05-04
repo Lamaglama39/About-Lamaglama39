@@ -9,6 +9,11 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+// スクロールを無効化する関数
+const preventScroll = (e: Event) => {
+  e.preventDefault();
+};
+
 // アルパカの3Dモデルビューワーコンポーネント
 const AlpacaModel = ({ initialIsMobile }: { initialIsMobile: boolean }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -39,6 +44,19 @@ const AlpacaModel = ({ initialIsMobile }: { initialIsMobile: boolean }) => {
   const currentModelPathRef = useRef<string>("");
   // 現在ロードされているモデルの参照
   const currentModelRef = useRef<any>(null);
+  
+  // スクロール無効化を設定
+  useEffect(() => {
+    // スクロールを無効化
+    document.addEventListener('touchmove', preventScroll, { passive: false });
+    document.addEventListener('wheel', preventScroll, { passive: false });
+    
+    // クリーンアップ時にイベントリスナーを削除
+    return () => {
+      document.removeEventListener('touchmove', preventScroll);
+      document.removeEventListener('wheel', preventScroll);
+    };
+  }, []);
   
   const applyLightPreset = (presetKey: string, intensity: number = 1.0) => {
     if (!sceneRef.current) return;
@@ -493,7 +511,7 @@ const AlpacaModel = ({ initialIsMobile }: { initialIsMobile: boolean }) => {
       {!loading && !error && (
         <div className="absolute bottom-25 left-1/2 transform -translate-x-1/2 max-w-md w-full px-4">
           <div 
-            className="relative bg-gray-900 bg-opacity-70 backdrop-blur-md rounded-xl px-4 py-2 text-white shadow-xl border border-gray-700 transition-all duration-300 flex flex-col"
+            className="relative bg-gray-900 bg-opacity-70 backdrop-blur-md rounded-xl px-4 py-2 text-white shadow-xl border border-gray-700 transition-all duration-300 flex flex-col mb-4"
             style={{ maxHeight: showControls ? '400px' : '50px', overflow: 'hidden' }}
           >
             <div className="flex justify-between items-center">
@@ -591,10 +609,24 @@ export default function Alpaca() {
   
   useEffect(() => {
     setLoaded(true);
+    
+    // 画面の高さを設定するスタイルを追加
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.height = '100%';
+    document.body.style.height = '100%';
+    
+    // クリーンアップ時に戻す
+    return () => {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.documentElement.style.height = '';
+      document.body.style.height = '';
+    };
   }, []);
 
   return (
-    <main className={`min-h-screen transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
+    <main className={`h-screen transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'} overflow-hidden`}>
       <div className="relative h-screen w-full overflow-hidden">
         {/* 3Dモデル */}
         <ClientOnly onMount={handleClientMount}>
