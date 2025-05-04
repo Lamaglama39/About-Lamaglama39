@@ -15,7 +15,7 @@ export default function NavBar() {
           {/* ロゴ（左端に配置） */}
           <div className="flex-none md:w-1/4 flex justify-center md:justify-start">
             <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <img src="/space-lama.png" alt="Lamaglama39" className="w-12 h-12 rounded-full" />
+              <img src="/space-lama.webp" alt="Lamaglama39" className="w-12 h-12 rounded-full" />
               <span className="text-2xl font-bold text-gray-900 dark:text-white">Lamaglama39</span>
             </Link>
           </div>
