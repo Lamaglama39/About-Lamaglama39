@@ -2,7 +2,7 @@
 まわせいぃ！  
 アルパカをまわせいぃ！！
 
-[lamaglama39.dev](https://lamaglama39.dev/)
+[about.lamaglama39.dev](https://about.lamaglama39.dev/)
 
 ![app-image](public/apps/lamaglama39.png)
 
