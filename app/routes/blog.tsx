@@ -3,6 +3,22 @@ import { useEffect, useState } from "react";
 import { getAllArticles, type Article } from "../utils/getBlogArticles";
 import { getCachedBlogData, setBlogCache, updateBlogCache } from "../utils/blogCache";
 
+// スケルトンローダーのコンポーネント
+const ArticleSkeleton = () => (
+  <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md animate-pulse">
+    <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+    <div className="flex items-center space-x-3 mb-3">
+      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
+      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+    </div>
+    <div className="flex flex-wrap gap-2 mb-4">
+      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
+    </div>
+    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+  </div>
+);
+
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "ブログ | Lamaglama39" },
@@ -13,7 +29,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Blog() {
   const [loaded, setLoaded] = useState(false);
   const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
   // ページング用のステート
@@ -34,7 +50,6 @@ export default function Blog() {
           setCurrentPage(cachedData.currentPage);
           setError(cachedData.error);
           setLoaded(true);
-          setLoading(false);
           return;
         }
         
@@ -54,8 +69,8 @@ export default function Blog() {
           error: null
         });
         
-        setLoaded(true);
         setLoading(false);
+        setLoaded(true);
       } catch (err) {
         console.error('記事の取得に失敗しました:', err);
         const errorMessage = '記事の取得中にエラーが発生しました。';
@@ -69,8 +84,8 @@ export default function Blog() {
           error: errorMessage
         });
         
-        setLoaded(true);
         setLoading(false);
+        setLoaded(true);
       }
     };
     
@@ -221,20 +236,22 @@ export default function Blog() {
   };
 
   return (
-    <main className={`min-h-screen p-6 md:p-8 lg:p-12 transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
+    <main className="min-h-screen p-6 md:p-8 lg:p-12">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">技術ブログ</h1>
         
         {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-500"></div>
+          <div className="space-y-8">
+            {[...Array(5)].map((_, index) => (
+              <ArticleSkeleton key={index} />
+            ))}
           </div>
         ) : error ? (
           <div className="bg-red-100 dark:bg-red-900/30 p-4 rounded-lg mb-6">
             <p className="text-red-700 dark:text-red-300">{error}</p>
           </div>
         ) : (
-          <>
+          <div className={`transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
             {articles.length > 0 ? (
               <>
                 {/* 現在のページ情報 */}
@@ -345,7 +362,7 @@ export default function Blog() {
                 <p className="text-yellow-700 dark:text-yellow-300">記事が見つかりませんでした。</p>
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
     </main>
