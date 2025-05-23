@@ -45,5 +45,14 @@ export const appData: AppData[] = [
     imageUrl: "apps/dvd.png",
     link: "https://retoro-screensaver.lamaglama39.dev/",
     github: "https://github.com/Lamaglama39/retoro-screensaver/"
+  },
+  {
+    id: 6,
+    title: "例の技術書風の画像メーカー",
+    description: "みんな大好きな例の技術書風の画像を作るやつです。\nどうぞご利用ください。",
+    technologies: ["JavaScript", "Cloudflare"],
+    imageUrl: "apps/geeky-cover-creator.png",
+    link: "https://geeky-cover-creator.lamaglama39.dev/",
+    github: "https://github.com/Lamaglama39/geeky-cover-creator/"
   }
 ]; 
