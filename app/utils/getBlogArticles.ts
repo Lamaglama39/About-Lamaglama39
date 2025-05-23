@@ -52,43 +52,70 @@ interface ZennApiResponse {
   total_count: number | null;
 }
 
+// リトライ処理のためのユーティリティ関数
+const retry = async <T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  delay: number = 1000
+): Promise<T> => {
+  let lastError: Error | null = null;
+  
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error as Error;
+      if (i < maxRetries - 1) {
+        await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+        console.log(`リトライ ${i + 1}/${maxRetries}...`);
+      }
+    }
+  }
+  
+  throw lastError;
+};
+
 /**
  * Qiita APIから記事を取得
  */
 export const getQiitaArticles = async (): Promise<Article[]> => {
   try {
-    // Qiita API v2を利用
-    const response = await fetch("https://qiita.com/api/v2/users/lamaglama39/items", {
-      headers: {
-        // トークンがあれば利用（ないと取得制限がある）
-        ...(import.meta.env.VITE_QIITA_ACCESS_TOKEN && {
-          Authorization: `Bearer ${import.meta.env.VITE_QIITA_ACCESS_TOKEN}`
-        })
+    const fetchArticles = async () => {
+      const response = await fetch("https://qiita.com/api/v2/users/lamaglama39/items", {
+        headers: {
+          ...(import.meta.env.VITE_QIITA_ACCESS_TOKEN && {
+            Authorization: `Bearer ${import.meta.env.VITE_QIITA_ACCESS_TOKEN}`
+          })
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Qiita API returned status: ${response.status}`);
       }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Qiita API returned status: ${response.status}`);
-    }
-    
-    const data = await response.json() as QiitaArticle[];
-    
-    // 記事データを標準形式に変換
-    return data.map((item, index) => ({
-      id: index + 1000, // 他のソースとIDが被らないよう大きな数値から始める
-      title: item.title,
-      date: item.created_at.split("T")[0],
-      excerpt: item.body.substring(0, 150).replace(/\r?\n/g, " ") + "...",
-      tags: item.tags.map(tag => tag.name),
-      url: item.url,
-      source: "Qiita",
-      likes_count: item.likes_count,
-      page_views_count: item.page_views_count || 0,
-      comments_count: item.comments_count
-    }));
+      
+      const data = await response.json() as QiitaArticle[];
+      
+      if (!data || data.length === 0) {
+        throw new Error("No articles found");
+      }
+      
+      return data.map((item, index) => ({
+        id: index + 1000,
+        title: item.title,
+        date: item.created_at.split("T")[0],
+        excerpt: item.body.substring(0, 150).replace(/\r?\n/g, " ") + "...",
+        tags: item.tags.map(tag => tag.name),
+        url: item.url,
+        source: "Qiita",
+        likes_count: item.likes_count,
+        page_views_count: item.page_views_count || 0,
+        comments_count: item.comments_count
+      }));
+    };
+
+    return await retry(fetchArticles);
   } catch (error) {
     console.error("Error fetching from Qiita, using fallback data:", error);
-    // Qiitaのフォールバックデータを返す
     return getQiitaFallbackData();
   }
 };
@@ -118,37 +145,36 @@ const getQiitaFallbackData = (): Article[] => {
  */
 export const getZennArticles = async (): Promise<Article[]> => {
   try {
-    // Zenn API を使用して記事を取得
-    const response = await fetch("https://zenn.dev/api/articles?username=lamaglama39&order=latest");
-    
-    if (!response.ok) {
-      throw new Error(`Zenn API returned status: ${response.status}`);
-    }
-    
-    const data = await response.json() as ZennApiResponse;
-    
-    // 記事が見つからなかった場合は空配列を返す
-    if (!data.articles || data.articles.length === 0) {
-      console.log("No articles found on Zenn");
-      return [];
-    }
-    
-    // 記事データを標準形式に変換
-    return data.articles.map((item, index) => ({
-      id: index + 1, // IDは1から始める
-      title: item.title,
-      date: item.published_at ? item.published_at.split("T")[0] : new Date().toISOString().split("T")[0],
-      excerpt: `${item.emoji} この記事は約${item.body_letters_count}文字です。`, // 本文は提供されていないのでプレースホルダー
-      tags: [], // API結果にタグがないためデフォルトは空配列
-      url: `https://zenn.dev/${item.user.username}/articles/${item.slug}`,
-      source: "Zenn",
-      likes_count: item.likes_count || 0,
-      page_views_count: item.views_count || 0,
-      comments_count: item.comments_count || 0
-    }));
+    const fetchArticles = async () => {
+      const response = await fetch("https://zenn.dev/api/articles?username=lamaglama39&order=latest");
+      
+      if (!response.ok) {
+        throw new Error(`Zenn API returned status: ${response.status}`);
+      }
+      
+      const data = await response.json() as ZennApiResponse;
+      
+      if (!data.articles || data.articles.length === 0) {
+        throw new Error("No articles found");
+      }
+      
+      return data.articles.map((item, index) => ({
+        id: index + 1,
+        title: item.title,
+        date: item.published_at ? item.published_at.split("T")[0] : new Date().toISOString().split("T")[0],
+        excerpt: `${item.emoji} この記事は約${item.body_letters_count}文字です。`,
+        tags: [],
+        url: `https://zenn.dev/${item.user.username}/articles/${item.slug}`,
+        source: "Zenn",
+        likes_count: item.likes_count || 0,
+        page_views_count: item.views_count || 0,
+        comments_count: item.comments_count || 0
+      }));
+    };
+
+    return await retry(fetchArticles);
   } catch (error) {
     console.error("Error fetching from Zenn, using fallback data:", error);
-    // Zennのフォールバックデータを返す
     return getZennFallbackData();
   }
 };
@@ -178,78 +204,83 @@ const getZennFallbackData = (): Article[] => {
  */
 export const getClassMethodArticles = async (): Promise<Article[]> => {
   try {
-    console.log("Fetching DevelopersIO articles from RSS feed");
-    
-    // CORS問題を回避するために、別のプロキシサービスを使用
-    const corsProxyUrl = "https://api.allorigins.win/raw?url=";
-    const targetUrl = "https://dev.classmethod.jp/author/akaike/feed/";
-    const proxyUrl = `${corsProxyUrl}${encodeURIComponent(targetUrl)}`;
-    
-    const response = await fetch(proxyUrl, {
-      headers: {
-        "Accept": "application/xml, text/xml, */*"
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`RSS feed returned status: ${response.status}`);
-    }
-    
-    const xmlText = await response.text();
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-    
-    const items = xmlDoc.getElementsByTagName("item");
-    const articles: Article[] = [];
-    
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
+    const fetchArticles = async () => {
+      console.log("Fetching DevelopersIO articles from RSS feed");
       
-      // タイトルの取得
-      const titleNode = item.getElementsByTagName("title")[0];
-      const title = titleNode ? titleNode.textContent?.replace(/\!\[CDATA\[|\]\]/g, "").trim() : "";
+      const corsProxyUrl = "https://api.allorigins.win/raw?url=";
+      const targetUrl = "https://dev.classmethod.jp/author/akaike/feed/";
+      const proxyUrl = `${corsProxyUrl}${encodeURIComponent(targetUrl)}`;
       
-      // リンクの取得
-      const linkNode = item.getElementsByTagName("link")[0];
-      const url = linkNode ? linkNode.textContent || "" : "";
-      
-      // 公開日の取得
-      const dateNode = item.getElementsByTagName("pubDate")[0];
-      const pubDate = dateNode ? dateNode.textContent || "" : "";
-      const date = pubDate ? new Date(pubDate).toISOString().split("T")[0] : "";
-      
-      // 説明の取得
-      const descNode = item.getElementsByTagName("description")[0];
-      const excerpt = descNode ? descNode.textContent?.replace(/\!\[CDATA\[|\]\]/g, "").trim() || "" : "";
-      
-      // タグの取得
-      const categoryNodes = item.getElementsByTagName("category");
-      const tags: string[] = [];
-      for (let j = 0; j < categoryNodes.length; j++) {
-        const categoryNode = categoryNodes[j];
-        const category = categoryNode.textContent?.replace(/\!\[CDATA\[|\]\]/g, "").trim();
-        if (category) {
-          tags.push(category);
+      const response = await fetch(proxyUrl, {
+        headers: {
+          "Accept": "application/xml, text/xml, */*"
         }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`RSS feed returned status: ${response.status}`);
       }
       
-      articles.push({
-        id: 2000 + i, // IDはユニークになるように2000から始める
-        title: title || "",
-        date,
-        excerpt: excerpt || "",
-        tags,
-        url,
-        source: "DevelopersIO"
-      });
-    }
-    
-    console.log(`Got ${articles.length} articles from DevelopersIO`);
-    return articles;
+      const xmlText = await response.text();
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+      
+      const items = xmlDoc.getElementsByTagName("item");
+      
+      if (!items || items.length === 0) {
+        throw new Error("No articles found in RSS feed");
+      }
+      
+      const articles: Article[] = [];
+      
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        
+        const titleNode = item.getElementsByTagName("title")[0];
+        const title = titleNode ? titleNode.textContent?.replace(/\!\[CDATA\[|\]\]/g, "").trim() : "";
+        
+        const linkNode = item.getElementsByTagName("link")[0];
+        const url = linkNode ? linkNode.textContent || "" : "";
+        
+        const dateNode = item.getElementsByTagName("pubDate")[0];
+        const pubDate = dateNode ? dateNode.textContent || "" : "";
+        const date = pubDate ? new Date(pubDate).toISOString().split("T")[0] : "";
+        
+        const descNode = item.getElementsByTagName("description")[0];
+        const excerpt = descNode ? descNode.textContent?.replace(/\!\[CDATA\[|\]\]/g, "").trim() || "" : "";
+        
+        const categoryNodes = item.getElementsByTagName("category");
+        const tags: string[] = [];
+        for (let j = 0; j < categoryNodes.length; j++) {
+          const categoryNode = categoryNodes[j];
+          const category = categoryNode.textContent?.replace(/\!\[CDATA\[|\]\]/g, "").trim();
+          if (category) {
+            tags.push(category);
+          }
+        }
+        
+        articles.push({
+          id: 2000 + i,
+          title: title || "",
+          date,
+          excerpt: excerpt || "",
+          tags,
+          url,
+          source: "DevelopersIO"
+        });
+      }
+      
+      if (articles.length === 0) {
+        throw new Error("No articles found after parsing RSS feed");
+      }
+      
+      console.log(`Got ${articles.length} articles from DevelopersIO`);
+      return articles;
+    };
+
+    return await retry(fetchArticles);
   } catch (error) {
     console.error("Error with ClassMethod articles, using fallback data:", error);
-    
-    // 失敗した場合はフォールバックの静的データを返す
     return getClassMethodFallbackData();
   }
 };
