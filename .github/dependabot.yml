@@ -50,7 +50,7 @@ updates:
       default-days: 21
       semver-major-days: 30
       semver-minor-days: 21
-      semver-patch-days: 7
+      semver-patch-days: 21
 
   - package-ecosystem: "github-actions"
     directory: "/"
