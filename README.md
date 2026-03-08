@@ -14,82 +14,157 @@
 | Infrastructure    | Cloudflare Workers                           |
 | Design            | Figma                                        |
 
-<!-- # Welcome to React Router!
+## ディレクトリ構成
 
-A modern, production-ready template for building full-stack React applications using React Router.
+```
+.
+├── app/                           # アプリケーション本体
+│   ├── components/                # UIコンポーネント
+│   │   ├── NavBar.tsx             #   ナビゲーションバー
+│   │   ├── AppCard.tsx            #   アプリ紹介カード
+│   │   ├── AppGrid.tsx            #   アプリ一覧グリッド
+│   │   ├── CareerItem.tsx         #   職歴表示(展開式)
+│   │   ├── SkillSection.tsx       #   スキルセクション
+│   │   ├── SkillIcon.tsx          #   スキルアイコン
+│   │   ├── ContactSection.tsx     #   連絡先セクション
+│   │   ├── ContactIcon.tsx        #   連絡先アイコン
+│   │   ├── DMarkIcon.tsx          #   DevelopersIOアイコン
+│   │   └── EmojiLinkFavicon.tsx   #   絵文字ファビコン
+│   ├── routes/                    # ページルート
+│   │   ├── alpaca.tsx             #   トップページ(3Dアルパカビューワー)
+│   │   ├── home.tsx               #   ホーム(自己紹介/スキル/職歴)
+│   │   ├── blog.tsx               #   ブログ記事一覧(Zenn/Qiita/DevelopersIO)
+│   │   ├── apps.tsx               #   制作アプリ一覧
+│   │   ├── profile.tsx            #   プロフィール詳細
+│   │   └── $.tsx                  #   404ページ
+│   ├── data/                      # 静的データ定義
+│   │   ├── profileData.ts         #   プロフィール/職歴/スキル/連絡先
+│   │   ├── apps.ts                #   制作アプリ情報
+│   │   └── lightPresets.ts        #   3Dライティングプリセット(10種類)
+│   ├── utils/                     # ユーティリティ
+│   │   ├── getBlogArticles.ts     #   ブログ記事取得(API/RSS)
+│   │   ├── blogCache.ts           #   ブログキャッシュ(localStorage/5分TTL)
+│   │   └── emojiToDataUrl.ts      #   絵文字をData URLに変換
+│   ├── root.tsx                   # ルートレイアウト
+│   ├── entry.server.tsx           # SSRエントリーポイント
+│   ├── routes.ts                  # ルート定義
+│   └── app.css                    # グローバルスタイル(Tailwind CSS)
+├── workers/
+│   └── app.ts                     # Cloudflare Workersエントリー
+├── public/                        # 静的ファイル
+│   ├── model/                     #   3Dモデル(GLB形式)
+│   └── apps/                      #   アプリ紹介画像
+├── package.json                   # 依存パッケージ/スクリプト定義
+├── vite.config.ts                 # Viteビルド設定(Dracoコピー含む)
+├── react-router.config.ts         # React Router設定(SSR有効)
+├── wrangler.jsonc                 # Cloudflare Workers設定(ドメイン/ルーティング)
+├── tsconfig.json                  # TypeScript設定
+├── tsconfig.cloudflare.json       # Cloudflare用TypeScript設定
+├── tsconfig.node.json             # Node.js用TypeScript設定
+└── .npmrc                         # npm設定(min-release-age等)
+```
 
-## Features
+### 更新時作業
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+| やりたいこと | 編集するファイル |
+|-------------|----------------|
+| プロフィール/職歴/スキルの更新 | `app/data/profileData.ts` |
+| 制作アプリの追加/編集 | `app/data/apps.ts` + `public/apps/`に画像追加 |
+| ブログ取得元の変更 | `app/utils/getBlogArticles.ts` |
+| 3Dモデルの変更 | `public/model/`にGLBファイル配置 + `app/routes/alpaca.tsx` |
+| ライティングプリセットの追加 | `app/data/lightPresets.ts` |
+| ページの追加 | `app/routes/`にファイル追加 + `app/routes.ts`にルート追加 |
+| UIコンポーネントの追加 | `app/components/`にファイル追加 |
+| グローバルスタイルの変更 | `app/app.css` |
+| デプロイ先の変更 | `wrangler.jsonc` |
+| ビルド設定の変更 | `vite.config.ts` |
 
-## Getting Started
+## セットアップ
 
-### Installation
-
-Install the dependencies:
+依存パッケージをインストール
 
 ```bash
 npm install
 ```
 
-### Development
+### セキュリティチェック
 
-Start the development server with HMR:
+インストール後、脆弱性がないか確認
+
+```bash
+# 既知の脆弱性をチェック
+npm audit
+
+# 修正可能な脆弱性を自動修正
+npm audit fix
+```
+
+`.npmrc`で`min-release-age=21`を設定しており、公開から21日未満のパッケージはインストールされない。
+
+## 開発
+
+開発サーバーを起動
 
 ```bash
 npm run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
+`http://localhost:5173` でアクセス可能。
 
-## Previewing the Production Build
+## ビルド
 
-Preview the production build locally:
-
-```bash
-npm run preview
-```
-
-## Building for Production
-
-Create a production build:
+本番ビルドを作成
 
 ```bash
 npm run build
 ```
 
-## Deployment
+## プレビュー
 
-Deployment is done using the Wrangler CLI.
+本番ビルドをローカルで確認
 
-To build and deploy directly to production:
+```bash
+npm run preview
+```
 
-```sh
+## デプロイ
+
+Cloudflare Workersへのデプロイは[Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/)を使用する。
+
+### 初回セットアップ
+
+初回のみCloudflareへのログインが必要
+
+```bash
+npm run login
+```
+
+ブラウザが開くのでCloudflareアカウントで認証する。
+
+### デプロイ前の確認
+
+ビルドとデプロイの検証を実際のデプロイなしで実行
+
+```bash
+npm run deploy:check
+```
+
+### 本番デプロイ
+
+ビルドと本番環境へのデプロイを一括実行
+
+```bash
 npm run deploy
 ```
 
-To deploy a preview URL:
+### プレビューURLデプロイ
 
-```sh
+本番反映前にプレビューURLで動作確認する場合
+
+```bash
+# プレビューバージョンをアップロード
 npx wrangler versions upload
-```
 
-You can then promote a version to production after verification or roll it out progressively.
-
-```sh
+# 確認後、本番に昇格（段階的ロールアウトも可能）
 npx wrangler versions deploy
 ```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router. -->
