@@ -8,6 +8,13 @@ import { DOMParser } from "@xmldom/xmldom";
 
 const KV_KEY = "blog_articles";
 
+// Cloudflare Workersのサブリクエスト上限は50回/実行
+// 3ソース合計で上限を超えないようにページ数を制限
+const MAX_PAGES_QIITA = 5;
+const MAX_PAGES_ZENN = 5;
+// DevelopersIOはRSSのページネーションが効かないため1ページのみ
+const MAX_PAGES_DEVIO = 1;
+
 export interface Article {
   id: number;
   title: string;
@@ -57,51 +64,46 @@ interface ZennApiResponse {
 }
 
 /**
- * Retry utility with exponential backoff.
- */
-const retry = async <T>(
-  fn: () => Promise<T>,
-  maxRetries: number = 3,
-  delay: number = 1000
-): Promise<T> => {
-  let lastError: Error | null = null;
-
-  for (let i = 0; i < maxRetries; i++) {
-    try {
-      return await fn();
-    } catch (error) {
-      lastError = error as Error;
-      if (i < maxRetries - 1) {
-        await new Promise((resolve) =>
-          setTimeout(resolve, delay * Math.pow(2, i))
-        );
-        console.log(`Retry ${i + 1}/${maxRetries}...`);
-      }
-    }
-  }
-
-  throw lastError;
-};
-
-/**
- * Fetch articles from Qiita API.
+ * Fetch all articles from Qiita API with pagination.
+ * Uses per_page=100 and follows pages until no more results.
  */
 const fetchQiitaArticles = async (): Promise<Article[]> => {
-  const response = await fetch(
-    "https://qiita.com/api/v2/users/lamaglama39/items"
-  );
+  const allData: QiitaArticle[] = [];
+  let page = 1;
+  const perPage = 100;
 
-  if (!response.ok) {
-    throw new Error(`Qiita API returned status: ${response.status}`);
+  while (page <= MAX_PAGES_QIITA) {
+    const response = await fetch(
+      `https://qiita.com/api/v2/users/lamaglama39/items?page=${page}&per_page=${perPage}`
+    );
+
+    if (!response.ok) {
+      throw new Error(`Qiita API returned status: ${response.status}`);
+    }
+
+    const data = (await response.json()) as QiitaArticle[];
+
+    if (!data || data.length === 0) {
+      break;
+    }
+
+    allData.push(...data);
+
+    // 取得件数がper_page未満なら最後のページ
+    if (data.length < perPage) {
+      break;
+    }
+
+    page++;
   }
 
-  const data = (await response.json()) as QiitaArticle[];
-
-  if (!data || data.length === 0) {
+  if (allData.length === 0) {
     throw new Error("No articles found from Qiita");
   }
 
-  return data.map((item, index) => ({
+  console.log(`Qiita: fetched ${allData.length} articles (${page} pages)`);
+
+  return allData.map((item, index) => ({
     id: index + 1000,
     title: item.title,
     date: item.created_at.split("T")[0],
@@ -116,65 +118,79 @@ const fetchQiitaArticles = async (): Promise<Article[]> => {
 };
 
 /**
- * Fetch articles from Zenn API.
+ * Fetch all articles from Zenn API with pagination.
+ * Follows next_page until null.
  */
 const fetchZennArticles = async (): Promise<Article[]> => {
-  const response = await fetch(
-    "https://zenn.dev/api/articles?username=lamaglama39&order=latest"
-  );
+  const allArticles: Article[] = [];
+  let page: number | null = 1;
+  let articleIndex = 1;
 
-  if (!response.ok) {
-    throw new Error(`Zenn API returned status: ${response.status}`);
+  let pageCount = 0;
+  while (page !== null && pageCount < MAX_PAGES_ZENN) {
+    pageCount++;
+    const response = await fetch(
+      `https://zenn.dev/api/articles?username=lamaglama39&order=latest&page=${page}`,
+      {
+        headers: {
+          "User-Agent": "about-lamaglama39/1.0",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Zenn API returned status: ${response.status}`);
+    }
+
+    const data = (await response.json()) as ZennApiResponse;
+
+    if (!data.articles || data.articles.length === 0) {
+      break;
+    }
+
+    for (const item of data.articles) {
+      allArticles.push({
+        id: articleIndex++,
+        title: item.title,
+        date: item.published_at
+          ? item.published_at.split("T")[0]
+          : new Date().toISOString().split("T")[0],
+        excerpt: `${item.emoji} この記事は約${item.body_letters_count}文字です。`,
+        tags: [],
+        url: `https://zenn.dev/${item.user.username}/articles/${item.slug}`,
+        source: "Zenn",
+        likes_count: item.likes_count || 0,
+        page_views_count: item.views_count || 0,
+        comments_count: item.comments_count || 0,
+      });
+    }
+
+    page = data.next_page;
   }
 
-  const data = (await response.json()) as ZennApiResponse;
-
-  if (!data.articles || data.articles.length === 0) {
+  if (allArticles.length === 0) {
     throw new Error("No articles found from Zenn");
   }
 
-  return data.articles.map((item, index) => ({
-    id: index + 1,
-    title: item.title,
-    date: item.published_at
-      ? item.published_at.split("T")[0]
-      : new Date().toISOString().split("T")[0],
-    excerpt: `${item.emoji} この記事は約${item.body_letters_count}文字です。`,
-    tags: [],
-    url: `https://zenn.dev/${item.user.username}/articles/${item.slug}`,
-    source: "Zenn",
-    likes_count: item.likes_count || 0,
-    page_views_count: item.views_count || 0,
-    comments_count: item.comments_count || 0,
-  }));
+  console.log(`Zenn: fetched ${allArticles.length} articles`);
+
+  return allArticles;
 };
 
 /**
- * Fetch articles from DevelopersIO RSS feed.
- * No CORS proxy needed on server-side.
+ * Parse RSS XML and extract articles.
  */
-const fetchDevelopersIOArticles = async (): Promise<Article[]> => {
-  const response = await fetch(
-    "https://dev.classmethod.jp/author/akaike/feed/",
-    {
-      headers: {
-        Accept: "application/xml, text/xml, */*",
-      },
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error(`RSS feed returned status: ${response.status}`);
-  }
-
-  const xmlText = await response.text();
+const parseRssItems = (
+  xmlText: string,
+  startId: number,
+  source: string = "DevelopersIO"
+): Article[] => {
   const parser = new DOMParser();
   const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-
   const items = xmlDoc.getElementsByTagName("item");
 
   if (!items || items.length === 0) {
-    throw new Error("No articles found in RSS feed");
+    return [];
   }
 
   const articles: Article[] = [];
@@ -214,19 +230,98 @@ const fetchDevelopersIOArticles = async (): Promise<Article[]> => {
     }
 
     articles.push({
-      id: 2000 + i,
+      id: startId + i,
       title: title || "",
       date,
       excerpt: excerpt || "",
       tags,
       url,
-      source: "DevelopersIO",
+      source,
     });
   }
 
-  if (articles.length === 0) {
-    throw new Error("No articles found after parsing RSS feed");
+  return articles;
+};
+
+/**
+ * Fetch all articles from DevelopersIO RSS feed with pagination.
+ * WordPress RSS supports ?paged=N parameter.
+ * No CORS proxy needed on server-side.
+ */
+const fetchDevelopersIOArticles = async (): Promise<Article[]> => {
+  const allArticles: Article[] = [];
+  let page = 1;
+
+  while (page <= MAX_PAGES_DEVIO) {
+    const url =
+      page === 1
+        ? "https://dev.classmethod.jp/author/akaike/feed/"
+        : `https://dev.classmethod.jp/author/akaike/feed/?paged=${page}`;
+
+    const response = await fetch(url, {
+      headers: {
+        Accept: "application/xml, text/xml, */*",
+      },
+    });
+
+    // WordPressは最終ページを超えると404を返す
+    if (response.status === 404) {
+      break;
+    }
+
+    if (!response.ok) {
+      throw new Error(`RSS feed returned status: ${response.status}`);
+    }
+
+    const xmlText = await response.text();
+    const articles = parseRssItems(xmlText, 2000 + allArticles.length, "DevelopersIO");
+
+    if (articles.length === 0) {
+      break;
+    }
+
+    allArticles.push(...articles);
+    page++;
   }
+
+  if (allArticles.length === 0) {
+    throw new Error("No articles found from DevelopersIO RSS feed");
+  }
+
+  console.log(
+    `DevelopersIO: fetched ${allArticles.length} articles (${page - 1} pages)`
+  );
+
+  return allArticles;
+};
+
+/**
+ * Fetch all articles from tortoise-tech-blog RSS feed.
+ */
+const fetchTortoiseTechBlogArticles = async (): Promise<Article[]> => {
+  const response = await fetch(
+    "https://tortoise-tech-blog.lamaglama39.dev/index.xml",
+    {
+      headers: {
+        Accept: "application/xml, text/xml, */*",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `tortoise-tech-blog RSS feed returned status: ${response.status}`
+    );
+  }
+
+  const xmlText = await response.text();
+  const articles = parseRssItems(xmlText, 3000, "リクガメてっく。");
+
+  if (articles.length === 0) {
+    throw new Error("No articles found from tortoise-tech-blog");
+  }
+
+  console.log(`tortoise-tech-blog: fetched ${articles.length} articles`);
 
   return articles;
 };
@@ -236,9 +331,10 @@ const fetchDevelopersIOArticles = async (): Promise<Article[]> => {
  */
 export const fetchAllArticles = async (): Promise<Article[]> => {
   const results = await Promise.allSettled([
-    retry(() => fetchQiitaArticles()),
-    retry(() => fetchZennArticles()),
-    retry(() => fetchDevelopersIOArticles()),
+    fetchQiitaArticles(),
+    fetchZennArticles(),
+    fetchDevelopersIOArticles(),
+    fetchTortoiseTechBlogArticles(),
   ]);
 
   const articles: Article[] = [];
@@ -251,12 +347,20 @@ export const fetchAllArticles = async (): Promise<Article[]> => {
     }
   }
 
+  // URLベースで重複を除去
+  const seen = new Set<string>();
+  const unique = articles.filter((a) => {
+    if (seen.has(a.url)) return false;
+    seen.add(a.url);
+    return true;
+  });
+
   // 日付降順でソート
-  articles.sort(
+  unique.sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
-  return articles;
+  return unique;
 };
 
 /**
