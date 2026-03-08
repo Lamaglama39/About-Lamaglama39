@@ -42,7 +42,6 @@
 │   │   ├── apps.ts                #   制作アプリ情報
 │   │   └── lightPresets.ts        #   3Dライティングプリセット(10種類)
 │   ├── utils/                     # ユーティリティ
-│   │   ├── getBlogArticles.ts     #   ブログ記事取得(API/RSS)
 │   │   ├── blogCache.ts           #   ブログキャッシュ(localStorage/5分TTL)
 │   │   └── emojiToDataUrl.ts      #   絵文字をData URLに変換
 │   ├── root.tsx                   # ルートレイアウト
@@ -50,7 +49,8 @@
 │   ├── routes.ts                  # ルート定義
 │   └── app.css                    # グローバルスタイル(Tailwind CSS)
 ├── workers/
-│   └── app.ts                     # Cloudflare Workersエントリー
+│   ├── app.ts                     # Cloudflare Workersエントリー(Cron Trigger含む)
+│   └── blogFetcher.ts             # ブログ記事取得+KVキャッシュ管理
 ├── public/                        # 静的ファイル
 │   ├── model/                     #   3Dモデル(GLB形式)
 │   └── apps/                      #   アプリ紹介画像
@@ -70,7 +70,7 @@
 |-------------|----------------|
 | プロフィール/職歴/スキルの更新 | `app/data/profileData.ts` |
 | 制作アプリの追加/編集 | `app/data/apps.ts` + `public/apps/`に画像追加 |
-| ブログ取得元の変更 | `app/utils/getBlogArticles.ts` |
+| ブログ取得元の変更 | `workers/blogFetcher.ts` |
 | 3Dモデルの変更 | `public/model/`にGLBファイル配置 + `app/routes/alpaca.tsx` |
 | ライティングプリセットの追加 | `app/data/lightPresets.ts` |
 | ページの追加 | `app/routes/`にファイル追加 + `app/routes.ts`にルート追加 |

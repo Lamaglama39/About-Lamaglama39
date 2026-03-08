@@ -1,4 +1,4 @@
-import type { Article } from "./getBlogArticles";
+import type { Article } from "../../workers/blogFetcher";
 
 interface BlogCache {
   articles: Article[];
