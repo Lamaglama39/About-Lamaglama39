@@ -12,3 +12,6 @@
 .dev.vars*
 public/draco
 .vscode
+
+# custom
+.tmp

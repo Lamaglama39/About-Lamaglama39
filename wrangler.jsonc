@@ -7,17 +7,24 @@
 	"name": "about-lamaglama39",
 	"compatibility_date": "2025-04-04",
 	"main": "./workers/app.ts",
-	// "vars": {
-		// "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare",
-		// "BLOG_FETCHER_URL": "https://blog-fetcher.workers.dev"
-	// },
 	"observability": {
 		"enabled": true
 	},
+	"kv_namespaces": [
+		{
+			"binding": "about-lamaglama39-blog-cache",
+			"id": "<KV_NAMESPACE_ID>"
+		}
+	],
+	"triggers": {
+		"crons": [
+			"0 */12 * * *"
+		]
+	},
 	"routes": [
 		{
-		  "pattern": "about.lamaglama39.dev",
-		  "custom_domain": true
+			"pattern": "about.lamaglama39.dev",
+			"custom_domain": true
 		}
 	],
 }
