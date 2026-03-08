@@ -1,6 +1,7 @@
 import type { Route } from "./+types/blog";
 import { useEffect, useState } from "react";
-import { getAllArticles, type Article } from "../utils/getBlogArticles";
+import type { Article } from "../../workers/blogFetcher";
+import { getCachedArticles } from "../../workers/blogFetcher";
 import { getCachedBlogData, setBlogCache, updateBlogCache } from "../utils/blogCache";
 
 // スケルトンローダーのコンポーネント
@@ -26,72 +27,45 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export default function Blog() {
+export async function loader({ context }: Route.LoaderArgs) {
+  try {
+    const articles = await getCachedArticles(context.cloudflare.env["about-lamaglama39-blog-cache"]);
+    return { articles, error: null };
+  } catch (err) {
+    console.error("Failed to load blog articles:", err);
+    return { articles: [] as Article[], error: "記事の取得中にエラーが発生しました。" };
+  }
+}
+
+export default function Blog({ loaderData }: Route.ComponentProps) {
   const [loaded, setLoaded] = useState(false);
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  
+  const [articles] = useState<Article[]>(loaderData.articles);
+  const [error] = useState<string | null>(loaderData.error);
+
   // ページング用のステート
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // 1ページあたり10件の記事を表示
-  
-  // コンポーネントマウント時に記事データを取得（キャッシュがあればそれを使用）
+
+  // コンポーネントマウント時にlocalStorageキャッシュを更新
   useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        // まずキャッシュをチェック
-        const cachedData = getCachedBlogData();
-        
-        if (cachedData) {
-          // キャッシュがあれば使用
-          console.log('キャッシュからブログデータを読み込みました');
-          setArticles(cachedData.articles);
-          setCurrentPage(cachedData.currentPage);
-          setError(cachedData.error);
-          setLoaded(true);
-          return;
-        }
-        
-        // キャッシュがなければ新たにデータを取得
-        setLoading(true);
-        
-        // 複数ソースから記事を取得して統合
-        const allArticles = await getAllArticles();
-        
-        setArticles(allArticles);
-        setError(null);
-        
-        // キャッシュにデータを保存
-        setBlogCache({
-          articles: allArticles,
-          currentPage: 1,
-          error: null
-        });
-        
-        setLoading(false);
-        setLoaded(true);
-      } catch (err) {
-        console.error('記事の取得に失敗しました:', err);
-        const errorMessage = '記事の取得中にエラーが発生しました。';
-        setError(errorMessage);
-        setArticles([]);
-        
-        // エラー情報もキャッシュ
-        setBlogCache({
-          articles: [],
-          currentPage: 1,
-          error: errorMessage
-        });
-        
-        setLoading(false);
-        setLoaded(true);
+    setLoaded(true);
+
+    // loaderから取得したデータでlocalStorageキャッシュを更新
+    if (loaderData.articles.length > 0) {
+      // localStorageにキャッシュがあればページ番号を復元
+      const cachedData = getCachedBlogData();
+      if (cachedData?.currentPage) {
+        setCurrentPage(cachedData.currentPage);
       }
-    };
-    
-    fetchArticles();
-  }, []);
-  
+
+      setBlogCache({
+        articles: loaderData.articles,
+        currentPage: cachedData?.currentPage || 1,
+        error: loaderData.error,
+      });
+    }
+  }, [loaderData]);
+
   // URLのハッシュが変更されたときにページを切り替える
   useEffect(() => {
     const handleHashChange = () => {
@@ -100,17 +74,17 @@ export default function Blog() {
         const page = parseInt(hash.substring(6), 10);
         if (!isNaN(page) && page > 0 && page <= Math.ceil(articles.length / itemsPerPage)) {
           setCurrentPage(page);
-          
+
           // ページ情報をキャッシュに保存
           updateBlogCache({ currentPage: page });
         }
       }
     };
-    
+
     // 初期ロード時とハッシュ変更時に実行
     handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
-    
+
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
     };
@@ -122,13 +96,13 @@ export default function Blog() {
     const endIndex = startIndex + itemsPerPage;
     return articles.slice(startIndex, endIndex);
   };
-  
+
   // 表示する記事
   const currentArticles = getCurrentPageItems();
-  
+
   // 全ページ数
   const totalPages = Math.ceil(articles.length / itemsPerPage);
-  
+
   // ページ移動ハンドラー
   const goToPage = (page: number) => {
     if (page > 0 && page <= totalPages) {
@@ -138,18 +112,18 @@ export default function Blog() {
       window.scrollTo(0, 0);
     }
   };
-  
+
   // ページネーションコンポーネント
   const Pagination = () => {
     if (totalPages <= 1) return null;
-    
+
     // 表示するページ番号の範囲を決定（現在のページの前後2ページまで）
     const pageNumbers = [];
     const range = 2; // 前後に表示するページ数
-    
+
     let startPage = Math.max(1, currentPage - range);
     let endPage = Math.min(totalPages, currentPage + range);
-    
+
     // 必ず5ページ分は表示するようにする（可能な場合）
     if (endPage - startPage + 1 < 5) {
       if (startPage === 1) {
@@ -158,15 +132,15 @@ export default function Blog() {
         startPage = Math.max(1, totalPages - 4);
       }
     }
-    
+
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(i);
     }
-    
+
     return (
       <div className="flex justify-center items-center space-x-2 my-8">
         {/* 先頭ページへ */}
-        <button 
+        <button
           onClick={() => goToPage(1)}
           className={`px-3 py-1 rounded transition-colors ${
             currentPage === 1
@@ -177,9 +151,9 @@ export default function Blog() {
         >
           &laquo;
         </button>
-        
+
         {/* 前のページへ */}
-        <button 
+        <button
           onClick={() => goToPage(currentPage - 1)}
           className={`px-3 py-1 rounded transition-colors ${
             currentPage === 1
@@ -190,10 +164,10 @@ export default function Blog() {
         >
           &lsaquo;
         </button>
-        
+
         {/* ページ番号 */}
         {pageNumbers.map(number => (
-          <button 
+          <button
             key={number}
             onClick={() => goToPage(number)}
             className={`px-3 py-1 rounded ${
@@ -205,9 +179,9 @@ export default function Blog() {
             {number}
           </button>
         ))}
-        
+
         {/* 次のページへ */}
-        <button 
+        <button
           onClick={() => goToPage(currentPage + 1)}
           className={`px-3 py-1 rounded transition-colors ${
             currentPage === totalPages
@@ -218,9 +192,9 @@ export default function Blog() {
         >
           &rsaquo;
         </button>
-        
+
         {/* 最後のページへ */}
-        <button 
+        <button
           onClick={() => goToPage(totalPages)}
           className={`px-3 py-1 rounded transition-colors ${
             currentPage === totalPages
@@ -239,8 +213,8 @@ export default function Blog() {
     <main className="min-h-screen p-6 md:p-8 lg:p-12">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">技術ブログ</h1>
-        
-        {loading ? (
+
+        {!loaded ? (
           <div className="space-y-8">
             {[...Array(5)].map((_, index) => (
               <ArticleSkeleton key={index} />
@@ -260,14 +234,14 @@ export default function Blog() {
                     <p>全{articles.length}件中 {(currentPage - 1) * itemsPerPage + 1}〜{Math.min(currentPage * itemsPerPage, articles.length)}件を表示（{currentPage}/{totalPages}ページ）</p>
                   )}
                 </div>
-                
+
                 {/* 上部ページネーション - より目立つスタイル */}
                 {totalPages > 1 && (
                   <div className="mb-8 pb-4 border-b border-gray-200 dark:border-gray-700">
                     <Pagination />
                   </div>
                 )}
-                
+
                 {/* 記事リスト */}
                 <div className="space-y-8">
                   {currentArticles.map(article => (
@@ -275,15 +249,17 @@ export default function Blog() {
                       <div className="flex justify-between items-start mb-2">
                         <h2 className="text-xl font-bold text-gray-900 dark:text-white">{article.title}</h2>
                       </div>
-                      
+
                       {/* 投稿元サイトと投稿日を横に並べる */}
                       <div className="mb-3 flex items-center space-x-3">
                         {article.source && (
                           <span className={`px-2 py-1 text-xs font-bold rounded ${
-                            article.source === 'Zenn' 
+                            article.source === 'Zenn'
                               ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100'
                             : article.source === 'DevelopersIO'
                               ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100'
+                            : article.source === 'リクガメてっく。'
+                              ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100'
                             : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100'
                           }`}>
                             {article.source}
@@ -296,7 +272,7 @@ export default function Blog() {
                           {article.date}
                         </time>
                       </div>
-                      
+
                       <div className="flex flex-wrap gap-2 mb-4">
                         {article.tags.map(tag => (
                           <span key={tag} className="px-2 py-1 text-xs font-medium bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-100 rounded-full">
@@ -304,17 +280,17 @@ export default function Blog() {
                           </span>
                         ))}
                       </div>
-                      
+
                       <div className="flex justify-between items-center">
-                        <a 
-                          href={article.url} 
+                        <a
+                          href={article.url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-block px-4 py-2 text-sm font-medium text-white bg-cyan-500 hover:bg-cyan-600 dark:bg-cyan-600 dark:hover:bg-cyan-700 rounded transition-colors"
                         >
                           続きを読む
                         </a>
-                        
+
                         {/* 記事の統計情報を表示 */}
                         <div className="flex items-center space-x-4">
                           {article.likes_count !== undefined && (
@@ -325,7 +301,7 @@ export default function Blog() {
                               {article.likes_count}
                             </div>
                           )}
-                          
+
                           {article.comments_count !== undefined && (
                             <div className="flex items-center text-gray-500 dark:text-gray-400">
                               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -334,7 +310,7 @@ export default function Blog() {
                               {article.comments_count}
                             </div>
                           )}
-                          
+
                           {article.page_views_count !== undefined && article.page_views_count > 0 && (
                             <div className="flex items-center text-gray-500 dark:text-gray-400">
                               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -349,7 +325,7 @@ export default function Blog() {
                     </article>
                   ))}
                 </div>
-                
+
                 {/* 下部ページネーション */}
                 {totalPages > 1 && (
                   <div className="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700">
@@ -367,4 +343,4 @@ export default function Blog() {
       </div>
     </main>
   );
-} 
+}
