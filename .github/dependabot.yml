@@ -1,0 +1,66 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Asia/Tokyo"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "Lamaglama39"
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      # React関連をまとめて更新
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "react-router"
+          - "@react-router/*"
+          - "@react-three/*"
+      # ビルドツール関連をまとめて更新
+      build-tools:
+        patterns:
+          - "vite"
+          - "vite-*"
+          - "rollup"
+          - "@rollup/*"
+          - "esbuild"
+          - "typescript"
+          - "@tailwindcss/*"
+          - "tailwindcss"
+      # Cloudflare関連をまとめて更新
+      cloudflare:
+        patterns:
+          - "wrangler"
+          - "@cloudflare/*"
+          - "miniflare"
+      # 型定義をまとめて更新
+      types:
+        patterns:
+          - "@types/*"
+    versioning-strategy: "increase"
+    # .npmrcのmin-release-age=21と合わせたクールダウン設定
+    # セキュリティアップデートはcooldownをバイパスする
+    cooldown:
+      default-days: 21
+      semver-major-days: 30
+      semver-minor-days: 21
+      semver-patch-days: 7
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Tokyo"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(ci)"
