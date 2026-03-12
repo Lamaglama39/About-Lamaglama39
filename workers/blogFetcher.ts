@@ -74,7 +74,7 @@ const fetchQiitaArticles = async (): Promise<Article[]> => {
 
   while (page <= MAX_PAGES_QIITA) {
     const response = await fetch(
-      `https://qiita.com/api/v2/users/lamaglama39/items?page=${page}&per_page=${perPage}`
+      `https://qiita.com/api/v2/users/lamaglama39/items?page=${page}&per_page=${perPage}`,
     );
 
     if (!response.ok) {
@@ -103,8 +103,8 @@ const fetchQiitaArticles = async (): Promise<Article[]> => {
 
   console.log(`Qiita: fetched ${allData.length} articles (${page} pages)`);
 
-  return allData.map((item, index) => ({
-    id: index + 1000,
+  return allData.map((item) => ({
+    id: 0,
     title: item.title,
     date: item.created_at.split("T")[0],
     excerpt: item.body.substring(0, 150).replace(/\r?\n/g, " ") + "...",
@@ -124,7 +124,6 @@ const fetchQiitaArticles = async (): Promise<Article[]> => {
 const fetchZennArticles = async (): Promise<Article[]> => {
   const allArticles: Article[] = [];
   let page: number | null = 1;
-  let articleIndex = 1;
 
   let pageCount = 0;
   while (page !== null && pageCount < MAX_PAGES_ZENN) {
@@ -135,7 +134,7 @@ const fetchZennArticles = async (): Promise<Article[]> => {
         headers: {
           "User-Agent": "about-lamaglama39/1.0",
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -150,7 +149,7 @@ const fetchZennArticles = async (): Promise<Article[]> => {
 
     for (const item of data.articles) {
       allArticles.push({
-        id: articleIndex++,
+        id: 0,
         title: item.title,
         date: item.published_at
           ? item.published_at.split("T")[0]
@@ -182,8 +181,7 @@ const fetchZennArticles = async (): Promise<Article[]> => {
  */
 const parseRssItems = (
   xmlText: string,
-  startId: number,
-  source: string = "DevelopersIO"
+  source: string = "DevelopersIO",
 ): Article[] => {
   const parser = new DOMParser();
   const xmlDoc = parser.parseFromString(xmlText, "text/xml");
@@ -208,9 +206,7 @@ const parseRssItems = (
 
     const dateNode = item.getElementsByTagName("pubDate")[0];
     const pubDate = dateNode ? dateNode.textContent || "" : "";
-    const date = pubDate
-      ? new Date(pubDate).toISOString().split("T")[0]
-      : "";
+    const date = pubDate ? new Date(pubDate).toISOString().split("T")[0] : "";
 
     const descNode = item.getElementsByTagName("description")[0];
     const excerpt = descNode
@@ -230,7 +226,7 @@ const parseRssItems = (
     }
 
     articles.push({
-      id: startId + i,
+      id: 0,
       title: title || "",
       date,
       excerpt: excerpt || "",
@@ -274,7 +270,7 @@ const fetchDevelopersIOArticles = async (): Promise<Article[]> => {
     }
 
     const xmlText = await response.text();
-    const articles = parseRssItems(xmlText, 2000 + allArticles.length, "DevelopersIO");
+    const articles = parseRssItems(xmlText, "DevelopersIO");
 
     if (articles.length === 0) {
       break;
@@ -289,7 +285,7 @@ const fetchDevelopersIOArticles = async (): Promise<Article[]> => {
   }
 
   console.log(
-    `DevelopersIO: fetched ${allArticles.length} articles (${page - 1} pages)`
+    `DevelopersIO: fetched ${allArticles.length} articles (${page - 1} pages)`,
   );
 
   return allArticles;
@@ -305,17 +301,17 @@ const fetchTortoiseTechBlogArticles = async (): Promise<Article[]> => {
       headers: {
         Accept: "application/xml, text/xml, */*",
       },
-    }
+    },
   );
 
   if (!response.ok) {
     throw new Error(
-      `tortoise-tech-blog RSS feed returned status: ${response.status}`
+      `tortoise-tech-blog RSS feed returned status: ${response.status}`,
     );
   }
 
   const xmlText = await response.text();
-  const articles = parseRssItems(xmlText, 3000, "リクガメてっく。");
+  const articles = parseRssItems(xmlText, "リクガメてっく。");
 
   if (articles.length === 0) {
     throw new Error("No articles found from tortoise-tech-blog");
@@ -357,8 +353,13 @@ export const fetchAllArticles = async (): Promise<Article[]> => {
 
   // 日付降順でソート
   unique.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
+
+  // マージ・ソート後に連番IDを振る
+  unique.forEach((article, index) => {
+    article.id = index + 1;
+  });
 
   return unique;
 };
@@ -383,7 +384,7 @@ export const updateBlogCache = async (kv: KVNamespace): Promise<void> => {
  * Falls back to direct fetch if KV is empty.
  */
 export const getCachedArticles = async (
-  kv: KVNamespace
+  kv: KVNamespace,
 ): Promise<Article[]> => {
   const cached = await kv.get(KV_KEY);
 
@@ -391,13 +392,8 @@ export const getCachedArticles = async (
     return JSON.parse(cached) as Article[];
   }
 
-  // KVが空の場合は直接取得してKVに保存
-  console.log("KV cache is empty, fetching directly...");
-  const articles = await fetchAllArticles();
-
-  if (articles.length > 0) {
-    await kv.put(KV_KEY, JSON.stringify(articles));
-  }
-
-  return articles;
+  // KVが空の場合はログを出して空配列を返す
+  // 次回のCron Triggerで自動的にKVにデータが保存される
+  console.warn("KV cache is empty. Waiting for next scheduled update.");
+  return [];
 };

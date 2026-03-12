@@ -2,7 +2,6 @@ import type { Route } from "./+types/blog";
 import { useEffect, useState } from "react";
 import type { Article } from "../../workers/blogFetcher";
 import { getCachedArticles } from "../../workers/blogFetcher";
-import { getCachedBlogData, setBlogCache, updateBlogCache } from "../utils/blogCache";
 
 // スケルトンローダーのコンポーネント
 const ArticleSkeleton = () => (
@@ -29,64 +28,54 @@ export function meta({}: Route.MetaArgs) {
 
 export async function loader({ context }: Route.LoaderArgs) {
   try {
-    const articles = await getCachedArticles(context.cloudflare.env["about-lamaglama39-blog-cache"]);
+    const articles = await getCachedArticles(
+      context.cloudflare.env["about-lamaglama39-blog-cache"],
+    );
     return { articles, error: null };
   } catch (err) {
     console.error("Failed to load blog articles:", err);
-    return { articles: [] as Article[], error: "記事の取得中にエラーが発生しました。" };
+    return {
+      articles: [] as Article[],
+      error: "記事の取得中にエラーが発生しました。",
+    };
   }
 }
 
 export default function Blog({ loaderData }: Route.ComponentProps) {
   const [loaded, setLoaded] = useState(false);
-  const [articles] = useState<Article[]>(loaderData.articles);
-  const [error] = useState<string | null>(loaderData.error);
+  const articles: Article[] = loaderData.articles;
+  const error: string | null = loaderData.error;
 
   // ページング用のステート
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // 1ページあたり10件の記事を表示
 
-  // コンポーネントマウント時にlocalStorageキャッシュを更新
   useEffect(() => {
     setLoaded(true);
-
-    // loaderから取得したデータでlocalStorageキャッシュを更新
-    if (loaderData.articles.length > 0) {
-      // localStorageにキャッシュがあればページ番号を復元
-      const cachedData = getCachedBlogData();
-      if (cachedData?.currentPage) {
-        setCurrentPage(cachedData.currentPage);
-      }
-
-      setBlogCache({
-        articles: loaderData.articles,
-        currentPage: cachedData?.currentPage || 1,
-        error: loaderData.error,
-      });
-    }
-  }, [loaderData]);
+  }, []);
 
   // URLのハッシュが変更されたときにページを切り替える
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
-      if (hash.startsWith('#page-')) {
+      if (hash.startsWith("#page-")) {
         const page = parseInt(hash.substring(6), 10);
-        if (!isNaN(page) && page > 0 && page <= Math.ceil(articles.length / itemsPerPage)) {
+        if (
+          !isNaN(page) &&
+          page > 0 &&
+          page <= Math.ceil(articles.length / itemsPerPage)
+        ) {
           setCurrentPage(page);
-
-          // ページ情報をキャッシュに保存
-          updateBlogCache({ currentPage: page });
         }
       }
     };
 
     // 初期ロード時とハッシュ変更時に実行
     handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
+    window.addEventListener("hashchange", handleHashChange);
 
     return () => {
-      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener("hashchange", handleHashChange);
     };
   }, [articles.length]);
 
@@ -144,8 +133,8 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
           onClick={() => goToPage(1)}
           className={`px-3 py-1 rounded transition-colors ${
             currentPage === 1
-              ? 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500 cursor-not-allowed'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
+              ? "bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500 cursor-not-allowed"
+              : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
           }`}
           disabled={currentPage === 1}
         >
@@ -157,8 +146,8 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
           onClick={() => goToPage(currentPage - 1)}
           className={`px-3 py-1 rounded transition-colors ${
             currentPage === 1
-              ? 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500 cursor-not-allowed'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
+              ? "bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500 cursor-not-allowed"
+              : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
           }`}
           disabled={currentPage === 1}
         >
@@ -166,14 +155,14 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
         </button>
 
         {/* ページ番号 */}
-        {pageNumbers.map(number => (
+        {pageNumbers.map((number) => (
           <button
             key={number}
             onClick={() => goToPage(number)}
             className={`px-3 py-1 rounded ${
               currentPage === number
-                ? 'bg-cyan-500 text-white'
-                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
+                ? "bg-cyan-500 text-white"
+                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
             } transition-colors`}
           >
             {number}
@@ -185,8 +174,8 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
           onClick={() => goToPage(currentPage + 1)}
           className={`px-3 py-1 rounded transition-colors ${
             currentPage === totalPages
-              ? 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500 cursor-not-allowed'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
+              ? "bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500 cursor-not-allowed"
+              : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
           }`}
           disabled={currentPage === totalPages}
         >
@@ -198,8 +187,8 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
           onClick={() => goToPage(totalPages)}
           className={`px-3 py-1 rounded transition-colors ${
             currentPage === totalPages
-              ? 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500 cursor-not-allowed'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
+              ? "bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500 cursor-not-allowed"
+              : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
           }`}
           disabled={currentPage === totalPages}
         >
@@ -212,7 +201,9 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
   return (
     <main className="min-h-screen p-6 md:p-8 lg:p-12">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">技術ブログ</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+          技術ブログ
+        </h1>
 
         {!loaded ? (
           <div className="space-y-8">
@@ -225,13 +216,20 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
             <p className="text-red-700 dark:text-red-300">{error}</p>
           </div>
         ) : (
-          <div className={`transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
+          <div
+            className={`transition-opacity duration-500 ${loaded ? "opacity-100" : "opacity-0"}`}
+          >
             {articles.length > 0 ? (
               <>
                 {/* 現在のページ情報 */}
                 <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
                   {totalPages > 1 && (
-                    <p>全{articles.length}件中 {(currentPage - 1) * itemsPerPage + 1}〜{Math.min(currentPage * itemsPerPage, articles.length)}件を表示（{currentPage}/{totalPages}ページ）</p>
+                    <p>
+                      全{articles.length}件中{" "}
+                      {(currentPage - 1) * itemsPerPage + 1}〜
+                      {Math.min(currentPage * itemsPerPage, articles.length)}
+                      件を表示（{currentPage}/{totalPages}ページ）
+                    </p>
                   )}
                 </div>
 
@@ -244,38 +242,59 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
 
                 {/* 記事リスト */}
                 <div className="space-y-8">
-                  {currentArticles.map(article => (
-                    <article key={article.id} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                  {currentArticles.map((article) => (
+                    <article
+                      key={article.id}
+                      className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                    >
                       <div className="flex justify-between items-start mb-2">
-                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">{article.title}</h2>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                          {article.title}
+                        </h2>
                       </div>
 
                       {/* 投稿元サイトと投稿日を横に並べる */}
                       <div className="mb-3 flex items-center space-x-3">
                         {article.source && (
-                          <span className={`px-2 py-1 text-xs font-bold rounded ${
-                            article.source === 'Zenn'
-                              ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100'
-                            : article.source === 'DevelopersIO'
-                              ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100'
-                            : article.source === 'リクガメてっく。'
-                              ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100'
-                            : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100'
-                          }`}>
+                          <span
+                            className={`px-2 py-1 text-xs font-bold rounded ${
+                              article.source === "Zenn"
+                                ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100"
+                                : article.source === "DevelopersIO"
+                                  ? "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100"
+                                  : article.source === "リクガメてっく。"
+                                    ? "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100"
+                                    : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
+                            }`}
+                          >
                             {article.source}
                           </span>
                         )}
                         <time className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 mr-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
                           </svg>
                           {article.date}
                         </time>
                       </div>
 
                       <div className="flex flex-wrap gap-2 mb-4">
-                        {article.tags.map(tag => (
-                          <span key={tag} className="px-2 py-1 text-xs font-medium bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-100 rounded-full">
+                        {article.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-2 py-1 text-xs font-medium bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-100 rounded-full"
+                          >
                             {tag}
                           </span>
                         ))}
@@ -295,7 +314,12 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
                         <div className="flex items-center space-x-4">
                           {article.likes_count !== undefined && (
                             <div className="flex items-center text-gray-500 dark:text-gray-400">
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4 mr-1"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                              >
                                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                               </svg>
                               {article.likes_count}
@@ -304,22 +328,50 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
 
                           {article.comments_count !== undefined && (
                             <div className="flex items-center text-gray-500 dark:text-gray-400">
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4 mr-1"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                                />
                               </svg>
                               {article.comments_count}
                             </div>
                           )}
 
-                          {article.page_views_count !== undefined && article.page_views_count > 0 && (
-                            <div className="flex items-center text-gray-500 dark:text-gray-400">
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                              </svg>
-                              {article.page_views_count}
-                            </div>
-                          )}
+                          {article.page_views_count !== undefined &&
+                            article.page_views_count > 0 && (
+                              <div className="flex items-center text-gray-500 dark:text-gray-400">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4 mr-1"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                  />
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                  />
+                                </svg>
+                                {article.page_views_count}
+                              </div>
+                            )}
                         </div>
                       </div>
                     </article>
@@ -335,7 +387,9 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
               </>
             ) : (
               <div className="bg-yellow-100 dark:bg-yellow-900/30 p-4 rounded-lg">
-                <p className="text-yellow-700 dark:text-yellow-300">記事が見つかりませんでした。</p>
+                <p className="text-yellow-700 dark:text-yellow-300">
+                  記事が見つかりませんでした。
+                </p>
               </div>
             )}
           </div>

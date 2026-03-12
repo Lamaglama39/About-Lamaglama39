@@ -1,4 +1,5 @@
 # About-Lamaglama39
+
 まわせいぃ！  
 アルパカをまわせいぃ！！
 
@@ -7,12 +8,13 @@
 ![app-image](public/apps/lamaglama39.png)
 
 ## 使用技術
-| Category          | Technology Stack                             |
-| ----------------- | ---------------------------------------------|
-| Frontend          | React, React Router v7, vite, Three.js       |
-| Backend           | Node.js                                      |
-| Infrastructure    | Cloudflare Workers                           |
-| Design            | Figma                                        |
+
+| Category       | Technology Stack                       |
+| -------------- | -------------------------------------- |
+| Frontend       | React, React Router v7, vite, Three.js |
+| Backend        | Node.js                                |
+| Infrastructure | Cloudflare Workers                     |
+| Design         | Figma                                  |
 
 ## ディレクトリ構成
 
@@ -42,7 +44,6 @@
 │   │   ├── apps.ts                #   制作アプリ情報
 │   │   └── lightPresets.ts        #   3Dライティングプリセット(10種類)
 │   ├── utils/                     # ユーティリティ
-│   │   ├── blogCache.ts           #   ブログキャッシュ(localStorage/5分TTL)
 │   │   └── emojiToDataUrl.ts      #   絵文字をData URLに変換
 │   ├── root.tsx                   # ルートレイアウト
 │   ├── entry.server.tsx           # SSRエントリーポイント
@@ -66,18 +67,18 @@
 
 ### 更新時作業
 
-| やりたいこと | 編集するファイル |
-|-------------|----------------|
-| プロフィール/職歴/スキルの更新 | `app/data/profileData.ts` |
-| 制作アプリの追加/編集 | `app/data/apps.ts` + `public/apps/`に画像追加 |
-| ブログ取得元の変更 | `workers/blogFetcher.ts` |
-| 3Dモデルの変更 | `public/model/`にGLBファイル配置 + `app/routes/alpaca.tsx` |
-| ライティングプリセットの追加 | `app/data/lightPresets.ts` |
-| ページの追加 | `app/routes/`にファイル追加 + `app/routes.ts`にルート追加 |
-| UIコンポーネントの追加 | `app/components/`にファイル追加 |
-| グローバルスタイルの変更 | `app/app.css` |
-| デプロイ先の変更 | `wrangler.jsonc` |
-| ビルド設定の変更 | `vite.config.ts` |
+| やりたいこと                   | 編集するファイル                                           |
+| ------------------------------ | ---------------------------------------------------------- |
+| プロフィール/職歴/スキルの更新 | `app/data/profileData.ts`                                  |
+| 制作アプリの追加/編集          | `app/data/apps.ts` + `public/apps/`に画像追加              |
+| ブログ取得元の変更             | `workers/blogFetcher.ts`                                   |
+| 3Dモデルの変更                 | `public/model/`にGLBファイル配置 + `app/routes/alpaca.tsx` |
+| ライティングプリセットの追加   | `app/data/lightPresets.ts`                                 |
+| ページの追加                   | `app/routes/`にファイル追加 + `app/routes.ts`にルート追加  |
+| UIコンポーネントの追加         | `app/components/`にファイル追加                            |
+| グローバルスタイルの変更       | `app/app.css`                                              |
+| デプロイ先の変更               | `wrangler.jsonc`                                           |
+| ビルド設定の変更               | `vite.config.ts`                                           |
 
 ## セットアップ
 
