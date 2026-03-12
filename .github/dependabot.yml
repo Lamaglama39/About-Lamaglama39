@@ -22,6 +22,8 @@ updates:
           - "react-router"
           - "@react-router/*"
           - "@react-three/*"
+          - "three"
+          - "@types/three"
       # ビルドツール関連をまとめて更新
       build-tools:
         patterns:
@@ -43,24 +45,13 @@ updates:
       types:
         patterns:
           - "@types/*"
+        exclude-patterns:
+          - "@types/three"
     versioning-strategy: "increase"
     # .npmrcのmin-release-age=21と合わせたクールダウン設定
     # セキュリティアップデートはcooldownをバイパスする
     cooldown:
       default-days: 21
-      semver-major-days: 30
+      semver-major-days: 21
       semver-minor-days: 21
       semver-patch-days: 21
-
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Asia/Tokyo"
-    labels:
-      - "dependencies"
-      - "github-actions"
-    commit-message:
-      prefix: "chore(ci)"
