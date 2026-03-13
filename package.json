@@ -27,7 +27,7 @@
 		"@cloudflare/vite-plugin": "^1.0.0",
 		"@cloudflare/workers-types": "^4.20250429.0",
 		"@react-router/dev": "^7.13.0",
-		"@tailwindcss/vite": "^4.0.0",
+		"@tailwindcss/vite": "^4.2.0",
 		"@types/fs-extra": "^11.0.4",
 		"@types/node": "^20",
 		"@types/react": "^19.0.1",
@@ -36,9 +36,9 @@
 		"fs-extra": "^11.3.0",
 		"tailwindcss": "^4.0.0",
 		"typescript": "^5.7.2",
-		"vite": "^6.4.1",
-		"vite-plugin-static-copy": "^2.3.1",
-		"vite-tsconfig-paths": "^5.1.4",
+		"vite": "^7.3.1",
+		"vite-plugin-static-copy": "^3.2.0",
+		"vite-tsconfig-paths": "^6.1.1",
 		"wrangler": "^4.13.2"
 	}
 }
